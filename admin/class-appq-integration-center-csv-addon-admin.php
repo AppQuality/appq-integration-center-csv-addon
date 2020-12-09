@@ -56,7 +56,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->integration = array(
 			'slug' => 'csv',
-			'name' => 'csv'
+			'name' => 'Csv'
 		);
 		$this->version = $version;
 
@@ -106,14 +106,14 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		return $integrations;
 	}
 
-    public function settings($campaign){
+    public function settings($campaign) {
         global $wpdb;
         $config = $wpdb->get_row(
             $wpdb->prepare('SELECT * FROM ' . $wpdb->prefix .'appq_integration_center_config WHERE campaign_id = %d AND integration = %s',$campaign->id,$this->integration['slug'])
         );
         $this->partial('settings',array(
             'config' => $config,
-        ));
+		));
     }
 
 	/**
