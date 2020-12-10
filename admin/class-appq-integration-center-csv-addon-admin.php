@@ -86,6 +86,9 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		{
 			wp_enqueue_script( "appq-integration-center-csv-addon-methods-js", plugins_url( "/assets/scripts/methods.js" , __FILE__ ), array( "jquery" ), $this->version, true );
 			wp_enqueue_script( "appq-integration-center-csv-addon-admin-js", plugins_url( "/assets/scripts/admin.js" , __FILE__ ), array( "jquery" ), $this->version, true );
+			wp_localize_script( $this->plugin_name, 'appqIntegrationCenterCSVAddon', array( 
+				'ajax_url' => admin_url( 'admin-ajax.php' ) 
+			) );
 		}
 	}
 

@@ -32,7 +32,7 @@
                 $csv_inspector = new CsvInspector( $cp_id );
 
                 if ( $csv_inspector->has_bugs() ) {
-                    $this->partial( "fields" );
+                    $this->partial( "fields", array( "cp_id" => $cp_id ) );
                     $this->partial( "download" );
                 } else {
                     ?>

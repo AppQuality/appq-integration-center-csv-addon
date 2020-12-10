@@ -36,3 +36,6 @@ $api = new IntegrationCenterRestApi($campaign->id,null,null);
         ?>
     </div>
 </div>
+<script type="text/javascript">
+var cp_id = JSON.parse( '<?php echo json_encode( $cp_id ); ?>' );
+</script>
