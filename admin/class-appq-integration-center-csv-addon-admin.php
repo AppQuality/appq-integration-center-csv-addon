@@ -56,7 +56,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->integration = array(
 			'slug' => 'csv',
-			'name' => 'Csv'
+			'name' => 'Csv Exporter'
 		);
 		$this->version = $version;
 
@@ -72,7 +72,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	public function enqueue_styles($hook) {
 		if (strpos($hook, 'integration-center') !== false)
 		{
-		    // if styles are needed
+		    wp_enqueue_style( "appq-integration-center-csv-addon-admin-css", plugins_url( "/assets/styles/admin.css", __FILE__ ), array(), $this->version, "screen" );
 		}
 	}
 
@@ -84,7 +84,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	public function enqueue_scripts($hook) {
 		if (strpos($hook, 'integration-center') !== false)
 		{
-			// // if scripts are needed
+			wp_enqueue_script( "appq-integration-center-csv-addon-methods-js", plugins_url( "/assets/scripts/methods.js" , __FILE__ ), array( "jquery" ), $this->version, true );
+			wp_enqueue_script( "appq-integration-center-csv-addon-admin-js", plugins_url( "/assets/scripts/admin.js" , __FILE__ ), array( "jquery" ), $this->version, true );
 		}
 	}
 
@@ -140,7 +141,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             {
                 ${$key} = $value;
             }
-        }
+		}
         include(WP_PLUGIN_DIR . '/' . $this->get_partial($slug));
     }
 }

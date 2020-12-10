@@ -115,6 +115,18 @@ class Appq_Integration_Center_Csv_Addon {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-appq-integration-center-csv-addon-admin.php';
 		
 		/**
+		 * The class responsible for inspecting and orchestrating of selected BUG Campaigns.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'class/class-appq-integration-center-csv-inspector.php';
+
+		/**
+		 * The class responsible for inspecting and orchestrating of selected BUG Campaigns.
+		 */
+		add_action('appq_integration_center_run',function(){
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'class/class-appq-integration-center-csv-api.php';
+		});
+
+		/**
 		 * Require ajax actions
 		 */		
 	    foreach (glob(plugin_dir_path( dirname( __FILE__ ) ) . 'ajax/*.php') as $filename)

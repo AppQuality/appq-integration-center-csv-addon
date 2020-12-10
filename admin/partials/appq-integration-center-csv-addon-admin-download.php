@@ -12,14 +12,10 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 ?>
-<div class="container">
-    <div class="row">
-        <div class="col col-md-10">
-            <h3 class="mt-1 mb-3">Test</h3>
-            <div class="alert alert-primary" role="alert">
-                To enable generic-upload, all you have to do is set this as selected type in <i>Home > General Settings</i>.<br>
-                <strong>Nothing else matters</strong>.
-            </div>
+<div class="row">
+    <div class="col">
+        <div class="mt-4">
+            <button id="download-csv-export" type="button" class="btn btn-success">Download CSV Export</button>
         </div>
     </div>
 </div>
