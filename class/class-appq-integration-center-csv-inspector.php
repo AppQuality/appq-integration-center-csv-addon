@@ -32,4 +32,18 @@ class CsvInspector
 		// Return result based on the campaign
 		return !empty( $results_ ) ? true : false;
 	}
+
+	public static function sanitize_array_of_ints( $array ) {
+		$purged = array();
+		
+		if ( !empty( $array ) ) {
+			foreach ( $array as $item ) {
+				if ( !empty( intval( $item ) ) ) {
+					array_push( $purged, intval( $item ) );
+				}
+			}
+		}
+
+		return $purged;
+	}
 }

@@ -86,9 +86,6 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		{
 			wp_enqueue_script( "appq-integration-center-csv-addon-methods-js", plugins_url( "/assets/scripts/methods.js" , __FILE__ ), array( "jquery" ), $this->version, true );
 			wp_enqueue_script( "appq-integration-center-csv-addon-admin-js", plugins_url( "/assets/scripts/admin.js" , __FILE__ ), array( "jquery" ), $this->version, true );
-			wp_localize_script( $this->plugin_name, 'appqIntegrationCenterCSVAddon', array( 
-				'ajax_url' => admin_url( 'admin-ajax.php' ) 
-			) );
 		}
 	}
 
@@ -146,5 +143,52 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             }
 		}
         include(WP_PLUGIN_DIR . '/' . $this->get_partial($slug));
-    }
+	}
+	
+	public function download_csv_export() {
+		$cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
+		$bug_ids = isset( $_POST[ "bug_ids" ] ) && !empty( $_POST[ "bug_ids" ] ) ? CsvInspector::sanitize_array_of_ints( $_POST[ "bug_ids" ] ) : false;
+		$field_keys = isset( $_POST[ "field_keys" ] ) && !empty( $_POST[ "field_keys" ] ) ? $_POST[ "field_keys" ] : false;
+
+		$result = new stdClass;
+		$result->success = false;
+
+		if ( 
+			!empty( $cp_id ) &&
+			!empty( $bug_ids ) &&
+			!empty( $field_keys )
+		) {
+			$export_path = plugin_dir_path( __FILE__ ) ."files/export.csv";
+			$export_url = plugin_dir_url( __FILE__ ) ."files/export.csv";
+			$CSV_API = new CSVRestApi( $cp_id );
+			$csv_data = array();
+
+			foreach ( $bug_ids as $bug_id ) {
+				$bug = $CSV_API->get_bug( $bug_id );
+				
+				// Prepare Bug Data if needed
+				if ( !isset( $csv_data[ $bug_id ] ) ) { $csv_data[ $bug_id ] = array(); }
+
+				// Fill the Bug Data
+				foreach ( $field_keys as $field_key ) {
+					$csv_data[ $bug_id ][] = $CSV_API->bug_data_replace( $bug, $field_key );
+				}
+			}
+
+			// Generate the File
+			$fp = fopen( $export_path, 'w' );
+			fputcsv( $fp, $field_keys );
+			foreach ( $csv_data as $bug_data ) {
+				fputcsv( $fp, $bug_data );
+			}
+			fclose( $fp );
+
+			// Init Result
+			$result->success = true;
+			$result->download_url = $export_url;
+		}
+		
+		echo json_encode( $result );
+		die( "" );
+	}
 }
