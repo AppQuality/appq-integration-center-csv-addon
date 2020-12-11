@@ -152,40 +152,59 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
 		$result = new stdClass;
 		$result->success = false;
+		$result->messages = array();
 
-		if ( 
-			!empty( $cp_id ) &&
-			!empty( $bug_ids ) &&
-			!empty( $field_keys )
-		) {
-			$export_path = plugin_dir_path( __FILE__ ) ."files/export.csv";
-			$export_url = plugin_dir_url( __FILE__ ) ."files/export.csv";
-			$CSV_API = new CSVRestApi( $cp_id );
-			$csv_data = array();
+		if ( !empty( $cp_id ) ) {
+			$is_valid_request = true;
 
-			foreach ( $bug_ids as $bug_id ) {
-				$bug = $CSV_API->get_bug( $bug_id );
-				
-				// Prepare Bug Data if needed
-				if ( !isset( $csv_data[ $bug_id ] ) ) { $csv_data[ $bug_id ] = array(); }
+			if ( !CsvInspector::has_bugs( $cp_id ) ) {
+				$result->messages[] = array( "type" => "warning", "message" => "Choose some a Campaign with Bugs." );
+				$is_valid_request = false;
+			}
 
-				// Fill the Bug Data
-				foreach ( $field_keys as $field_key ) {
-					$csv_data[ $bug_id ][] = $CSV_API->bug_data_replace( $bug, $field_key );
+			if ( empty( $bug_ids ) ) {
+				$result->messages[] = array( "type" => "error", "message" => "Choose some Bugs first." );
+				$is_valid_request = false;
+			}
+
+			if ( empty( $field_keys ) ) {
+				$result->messages[] = array( "type" => "error", "message" => "Choose some Fields first." );
+				$is_valid_request = false;
+			}
+
+			if ( $is_valid_request ) {
+				$export_path = plugin_dir_path( __FILE__ ) ."files/export.csv";
+				$export_url = plugin_dir_url( __FILE__ ) ."files/export.csv";
+				$CSV_API = new CSVRestApi( $cp_id );
+				$csv_data = array();
+
+				foreach ( $bug_ids as $bug_id ) {
+					$bug = $CSV_API->get_bug( $bug_id );
+					
+					// Prepare Bug Data if needed
+					if ( !isset( $csv_data[ $bug_id ] ) ) { $csv_data[ $bug_id ] = array(); }
+
+					// Fill the Bug Data
+					foreach ( $field_keys as $field_key ) {
+						$csv_data[ $bug_id ][] = $CSV_API->bug_data_replace( $bug, $field_key );
+					}
 				}
-			}
 
-			// Generate the File
-			$fp = fopen( $export_path, 'w' );
-			fputcsv( $fp, $field_keys );
-			foreach ( $csv_data as $bug_data ) {
-				fputcsv( $fp, $bug_data );
-			}
-			fclose( $fp );
+				// Generate the File
+				$fp = fopen( $export_path, 'w' );
+				fputcsv( $fp, $field_keys );
+				foreach ( $csv_data as $bug_data ) {
+					fputcsv( $fp, $bug_data );
+				}
+				fclose( $fp );
 
-			// Init Result
-			$result->success = true;
-			$result->download_url = $export_url;
+				// Init Result
+				$result->success = true;
+				$result->download_url = $export_url;
+				$result->messages[] = array( "type" => "success", "message" => "Your export will be downloaded soon!" );
+			}
+		} else {
+			$result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID." );
 		}
 		
 		echo json_encode( $result );

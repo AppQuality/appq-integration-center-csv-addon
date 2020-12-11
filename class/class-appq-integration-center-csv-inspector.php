@@ -9,12 +9,12 @@ class CsvInspector
 		$this->_CAMPAIGN_ID = $cp_id;
 	}
 
-	public function has_bugs( $cp_id = 0 ) {
+	public static function has_bugs( $cp_id = 0 ) {
 		// Check if CP ID is set as an Integer
 		$cp_id = intval( $cp_id );
 		
 		// If the CP ID is not provided collect it from the original init
-		if ( $cp_id == 0 ) { $cp_id = $this->_CAMPAIGN_ID; }
+		if ( $cp_id == 0 ) { $cp_id = self::_CAMPAIGN_ID; }
 
 		// Init Table
 		global $wpdb;

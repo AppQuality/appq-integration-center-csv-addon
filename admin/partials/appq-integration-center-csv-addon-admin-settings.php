@@ -29,9 +29,7 @@
             
             <?php 
             } else {
-                $csv_inspector = new CsvInspector( $cp_id );
-
-                if ( $csv_inspector->has_bugs() ) {
+                if ( CsvInspector::has_bugs( $cp_id ) ) {
                     $this->partial( "fields", array( "cp_id" => $cp_id ) );
                     $this->partial( "download" );
                 } else {
