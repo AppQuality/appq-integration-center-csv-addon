@@ -19,7 +19,7 @@ $custom_fields = $this->get_custom_fields( $cp_id );
     <h4 class="col-sm-12">Available fields</h4>
     <div id="available-fields" class="col-sm-12 available_fields csv-fields">
         <?php 
-        foreach($api->mappings as $key => $value) { 
+        foreach ( $api->mappings as $key => $value ) {
         ?>
 		    
             <span <?= array_key_exists('type',$value) ? 'class="'.$value['type'].'"' : '' ?> data-key="<?= $key ?>"> <?= $key ?> - <?= $value['description'] ?> </span> 
@@ -27,7 +27,7 @@ $custom_fields = $this->get_custom_fields( $cp_id );
         <?php 
         } 
         
-        foreach ($custom_fields as $custom_field) { 
+        foreach ( $custom_fields as $custom_field ) { 
         ?>
         
             <span data-map="<?= esc_attr($custom_field->map) ?>" data-source="<?= esc_attr($custom_field->source) ?>" data-name="<?= esc_attr($custom_field->name) ?>" class="custom"> <?=$custom_field->name ?> </span>

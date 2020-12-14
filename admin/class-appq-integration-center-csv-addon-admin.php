@@ -216,9 +216,15 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 					}
 				}
 
+				// Convert Keys to titles
+				$titles = array();
+				foreach ( $field_keys as $key ) {
+					$titles[] = isset( $CSV_API->mappings[ $key ] ) && !empty( $CSV_API->mappings[ $key ] ) ? $CSV_API->mappings[ $key ][ "description" ] : $key;
+				}
+
 				// Generate the File
 				$fp = fopen( $export_path, 'w' );
-				fputcsv( $fp, $field_keys );
+				fputcsv( $fp, $titles );
 				foreach ( $csv_data as $bug_data ) {
 					fputcsv( $fp, $bug_data );
 				}
