@@ -30,7 +30,7 @@ $custom_fields = $this->get_custom_fields( $cp_id );
         foreach ( $custom_fields as $custom_field ) { 
         ?>
         
-            <span data-map="<?= esc_attr($custom_field->map) ?>" data-source="<?= esc_attr($custom_field->source) ?>" data-name="<?= esc_attr($custom_field->name) ?>" class="custom"> <?=$custom_field->name ?> </span>
+            <span data-map="<?= esc_attr($custom_field->map) ?>" data-source="<?= esc_attr($custom_field->source) ?>" data-name="<?= esc_attr($custom_field->name) ?>" data-key="<?= $custom_field->name ?>" class="custom"><?= $custom_field->name ?></span>
         
         <?php 
         } 
