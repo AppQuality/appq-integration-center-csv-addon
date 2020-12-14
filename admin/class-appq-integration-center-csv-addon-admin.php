@@ -145,6 +145,32 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         include(WP_PLUGIN_DIR . '/' . $this->get_partial($slug));
 	}
 	
+	/**
+	 * Get Custom Mapping for a campaign
+	 * @method get_custom_fields
+	 * @date   2020-05-08T14:40:54+020
+	 * @author: Davide Bizzi <clochard>
+	 * @param  int                  $campaign_id 
+	 * @return array                               
+	 */
+	public static function get_custom_fields($campaign_id) {
+		global $wpdb;
+		
+		$sql = $wpdb->prepare('SELECT * FROM wp_appq_integration_center_custom_map 
+			WHERE campaign_id = %d',$campaign_id);
+		
+		return $wpdb->get_results($sql);
+	}
+
+	/**
+	 * Download CSV Export based on campaign ID, fields and bugs
+	 * @method download_csv_export (AJAX)
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param  int $cp_id
+	 * @param array (INT) $bug_ids
+	 * @param array (FIELD_KEYS) $field_keys
+	 */
 	public function download_csv_export() {
 		$cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
 		$bug_ids = isset( $_POST[ "bug_ids" ] ) && !empty( $_POST[ "bug_ids" ] ) ? CsvInspector::sanitize_array_of_ints( $_POST[ "bug_ids" ] ) : false;

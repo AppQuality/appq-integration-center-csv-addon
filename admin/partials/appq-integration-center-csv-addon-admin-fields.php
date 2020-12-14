@@ -12,7 +12,8 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 
-$api = new IntegrationCenterRestApi($campaign->id,null,null);
+$api = new IntegrationCenterRestApi( $cp_id, null, null );
+$custom_fields = $this->get_custom_fields( $cp_id );
 ?>
 <div class="row">
     <h4 class="col-sm-12">Available fields</h4>

@@ -9,6 +9,14 @@ class CsvInspector
 		$this->_CAMPAIGN_ID = $cp_id;
 	}
 
+	/**
+	 * Check if Campaign has bugs registered in it by it's Campaign ID
+	 * @method has_bugs
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param  int $cp_id
+	 * @return bool true / false
+	 */
 	public static function has_bugs( $cp_id = 0 ) {
 		// Check if CP ID is set as an Integer
 		$cp_id = intval( $cp_id );
@@ -33,6 +41,14 @@ class CsvInspector
 		return !empty( $results_ ) ? true : false;
 	}
 
+	/**
+	 * Sanitize array and return only the clean elements which are NON Empty Ints
+	 * @method sanitize_array_of_ints
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param array (INT) $array
+	 * @return array (INT) $purged
+	 */
 	public static function sanitize_array_of_ints( $array ) {
 		$purged = array();
 		
