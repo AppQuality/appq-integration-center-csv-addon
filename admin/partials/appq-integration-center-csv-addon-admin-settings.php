@@ -31,7 +31,7 @@
             } else {
                 if ( CsvInspector::has_bugs( $cp_id ) ) {
                     $this->partial( "fields", array( "cp_id" => $cp_id ) );
-                    $this->partial( "download" );
+                    $this->partial( "save" );
                 } else {
                     ?>
 

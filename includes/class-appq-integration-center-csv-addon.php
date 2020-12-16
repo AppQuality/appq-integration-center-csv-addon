@@ -159,6 +159,9 @@ class Appq_Integration_Center_Csv_Addon {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		// Define AJAX Call for the CSV Fields Save
+		$this->loader->add_action( "wp_ajax_save_csv_export", $plugin_admin, "save_csv_export" );
+
 		// Define AJAX Call for the CSV Download
 		$this->loader->add_action( "wp_ajax_download_csv_export", $plugin_admin, "download_csv_export" );
 

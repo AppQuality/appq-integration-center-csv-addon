@@ -62,4 +62,27 @@ class CsvInspector
 
 		return $purged;
 	}
+
+	/**
+	 * Sanitize array and return only the clean elements which are NON Empty Values
+	 * @method sanitize_array
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param array (MIXED) $array
+	 * @return array (MIXED) $purged
+	 */
+	public static function sanitize_array( $array ) {
+		$purged = array();
+		
+		if ( !empty( $array ) ) {
+			foreach ( $array as $item ) {
+				$item = sanitize_text_field( $item );
+				if ( !empty( $item ) ) {
+					array_push( $purged, $item );
+				}
+			}
+		}
+
+		return $purged;
+	}
 }

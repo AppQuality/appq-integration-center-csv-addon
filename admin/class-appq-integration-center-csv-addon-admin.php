@@ -55,7 +55,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->integration = array(
-			'slug' => 'csv',
+			'slug' => 'csv_exporter',
 			'name' => 'Csv Exporter'
 		);
 		$this->version = $version;
@@ -163,6 +163,118 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	}
 
 	/**
+	 * Get saved selected fields for the given Campaign ID
+	 * @method get_selected_fields
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param int $campaign_id
+	 * @return array (STRING) $result
+	 */
+	public function get_selected_fields( $campaign_id ) {
+		$campaign_id = intval( $campaign_id );
+		$result = array();
+
+		if ( $campaign_id > 0 ) {
+			global $wpdb;
+			$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+
+			// Check if the Campaign was already stored
+			$results_ = $wpdb->get_results(
+				$wpdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+				OBJECT
+			);
+
+			// Parse the Results into meaningful fields if needed
+			if ( !empty( $results_ ) ) {
+				$result = json_decode( $results_[ 0 ]->field_mapping );
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Save CSV Export fields based on campaign ID and fields
+	 * @method download_csv_export (AJAX)
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param  int $cp_id
+	 * @param array (FIELD_KEYS) $field_keys
+	 */
+	public function save_csv_export() {
+		$cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
+		$field_keys = isset( $_POST[ "field_keys" ] ) && !empty( $_POST[ "field_keys" ] ) ? CsvInspector::sanitize_array( $_POST[ "field_keys" ] ) : false;
+
+		$result = new stdClass;
+		$result->success = false;
+		$result->messages = array();
+
+		if ( !empty( $cp_id ) ) {
+			$is_valid_request = true;
+
+			if ( empty( $field_keys ) ) {
+				$result->messages[] = array( "type" => "error", "message" => "Choose some Fields first." );
+				$is_valid_request = false;
+			}
+
+			if ( $is_valid_request ) {
+				global $wpdb;
+				$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+
+				// Check if the Campaign was already stored
+				$results_ = $wpdb->get_results(
+					$wpdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
+					OBJECT
+				);
+
+				if ( !empty( $results_ ) ) { // Update the Config
+					$wpdb->update(
+						$appq_integration_center_config,
+						array(
+							"field_mapping" => json_encode( $field_keys )
+						),
+						array(
+							"campaign_id" => $cp_id,
+							"integration" => $this->integration[ "slug" ]
+						),
+						array(
+							"%s"
+						),
+						array(
+							"%d",
+							"%s"
+						)
+					);
+				} else { // Insert the Config
+					$wpdb->insert(
+						$appq_integration_center_config,
+						array(
+							"campaign_id" => $cp_id,
+							"integration" => $this->integration[ "slug" ],
+							"field_mapping" => json_encode( $field_keys )
+						),
+						array(
+							"%d",
+							"%s",
+							"%s"
+						)
+					);
+				}
+				
+				// Init Result
+				$result->success = true;
+				$result->download_url = $export_url;
+				$result->messages[] = array( "type" => "success", "message" => "Your fields are saved successfully!" );
+			}
+		} else {
+			$result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID." );
+		}
+		
+		echo json_encode( $result );
+		die( "" );
+	}
+
+	/**
 	 * Download CSV Export based on campaign ID, fields and bugs
 	 * @method download_csv_export (AJAX)
 	 * @date   2020-12-14
@@ -212,7 +324,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
 					// Fill the Bug Data
 					foreach ( $field_keys as $field_key ) {
-						$csv_data[ $bug_id ][] = $CSV_API->bug_data_replace( $bug, $field_key );
+						$data = $CSV_API->bug_data_replace( $bug, $field_key );
+						$csv_data[ $bug_id ][] = !empty( $data ) ? $data : "";
 					}
 				}
 

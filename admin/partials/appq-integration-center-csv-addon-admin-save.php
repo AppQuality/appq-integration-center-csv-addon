@@ -15,9 +15,9 @@
 <div class="row">
     <div class="col">
         <div class="mt-4">
-            <button id="download-csv-export" type="button" class="btn btn-success">
+            <button id="save-csv-export" type="button" class="btn btn-primary">
                 <i class="fa fa-spin"></i>
-                Download CSV Export
+                Save fields
             </button>
         </div>
     </div>
