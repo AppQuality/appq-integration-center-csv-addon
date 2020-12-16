@@ -164,7 +164,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
 	/**
 	 * Save CSV Export fields based on campaign ID and fields
-	 * @method download_csv_export (AJAX)
+	 * @method save_csv_export (AJAX)
 	 * @date   2020-12-14
 	 * @author: Gero Nikolov <gerthrudy>
 	 * @param  int $cp_id
