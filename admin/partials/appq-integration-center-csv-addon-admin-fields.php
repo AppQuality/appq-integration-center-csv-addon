@@ -13,8 +13,9 @@
  */
 
 $api = new IntegrationCenterRestApi( $cp_id, null, null );
+$CSVRestApi = new CSVRestApi( $cp_id );
 $custom_fields = $this->get_custom_fields( $cp_id );
-$selected_fields = $this->get_selected_fields( $cp_id );
+$selected_fields = $CSVRestApi->get_selected_fields( $cp_id );
 ?>
 <div class="row">
     <h4 class="col-sm-12">Available fields</h4>

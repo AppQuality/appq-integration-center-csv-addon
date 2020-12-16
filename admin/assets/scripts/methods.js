@@ -47,39 +47,65 @@ function clickSaveCSVExport() {
             console.log( response );
         }
     } );
+}
 
-    // Perform an AJAX Call
-    // jQuery.ajax( {
-    //     url: ajaxurl,
-    //     type: "POST",
-    //     data: {
-    //         action: "download_csv_export",
-    //         cp_id: cp_id,
-    //         bug_ids: bugIDs,
-    //         field_keys: fieldKeys
-    //     },
-    //     success: function( response ) {
-    //         // Unlock the buton
-    //         jQuery( $saveCSVExport ).removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
+function clickSend( event ) {
+    // Check if the Bug Tracker is set to CSV Exporter
+    if ( jQuery( "#general_settings [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
 
-    //         // Parse Result
-    //         if ( typeof response !== "undefined" ) {
-    //             let result = JSON.parse( response );
+    // Get the Bug ID
+    let bugID = jQuery( this ).data( "bug-id" );
 
-    //             if ( result.success ) {
-    //                 toastr.success( result.messages[ 0 ].message );
-    //                 window.open( result.download_url );
-    //             } else {
-    //                 if ( result.messages.length > 0 ) {
-    //                     for ( let key in result.messages ) {
-    //                         toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     error: function( response ) {
-    //         console.log( response );
-    //     }
-    // } );
+    // Check if the Bug ID is stored and in case it's not store it in the array
+    if ( bugIDs.indexOf( bugID ) == -1 ) { bugIDs.push( bugID ); }
+
+    // Init Checkup interval if needed
+    if ( !sendClicked ) {
+        sendClicked = true;
+        bugCollectorInterval = setInterval( saveCSVExport, 32 );
+    }
+}
+
+function saveCSVExport() {
+    if ( bugIDs.toString() == inspectionIDs.toString() ) { // If bugIDs is equal to inspectionIDs then all of the Single Buttons were clicked and we are ready for the download
+        // Reset the Setup
+        sendClicked = false;
+        clearInterval( bugCollectorInterval );
+        
+        // Invoke the CSV Download
+        jQuery.ajax( {
+            url: ajaxurl,
+            type: "POST",
+            data: {
+                action: "download_csv_export",
+                cp_id: cp_id,
+                bug_ids: bugIDs
+            },
+            success: function( response ) {
+                // Parse Result
+                if ( typeof response !== "undefined" ) {
+                    let result = JSON.parse( response );
+
+                    // Present Messages
+                    if ( result.messages.length > 0 ) {
+                        for ( let key in result.messages ) {
+                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                        }
+                    }
+
+                    // Invoke the Download upon success
+                    if ( result.success ) { window.open( result.download_url ); }
+                }
+            },
+            error: function( response ) {
+                console.log( response );
+            }
+        } );
+
+        // Reset the bugIDs and the inspectionIDs
+        bugIDs = [];
+        inspectionIDs = bugIDs;
+    } else { // Equalize the inspectionIDs with the bugIDs and proceed with the syncing
+        inspectionIDs = bugIDs;
+    }
 }
