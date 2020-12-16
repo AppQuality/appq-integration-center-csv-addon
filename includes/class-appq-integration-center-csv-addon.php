@@ -126,6 +126,14 @@ class Appq_Integration_Center_Csv_Addon {
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'class/class-appq-integration-center-csv-api.php';
 		});
 
+		/**
+		 * Require ajax actions
+		 */		
+	    foreach (glob(plugin_dir_path( dirname( __FILE__ ) ) . 'ajax/*.php') as $filename)
+	    {
+			require_once $filename;
+	    }
+
 		$this->loader = new Appq_Integration_Center_Csv_Addon_Loader();
 	}
 
