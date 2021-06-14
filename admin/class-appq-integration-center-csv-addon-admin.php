@@ -90,32 +90,35 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	}
 
 	/**
-	 * Register Internal integration type
+	 * Register integration type
 	 *
-	 * @param $integrations
-	 *
-	 * @return mixed
 	 * @since    1.0.0
 	 */
-	public function register_type($integrations) {
+	public function register_type($integrations)
+	{
 		$integrations[] = array_merge(
 			$this->integration,
 			array(
-				'class' => $this
+				'class' => $this,
+				'visible_to_customer' => true
 			)
 		);
 		return $integrations;
 	}
 
-    public function settings($campaign) {
-        global $wpdb;
-        $config = $wpdb->get_row(
-            $wpdb->prepare('SELECT * FROM ' . $wpdb->prefix .'appq_integration_center_config WHERE campaign_id = %d AND integration = %s',$campaign->id,$this->integration['slug'])
-        );
-        $this->partial('settings',array(
-			'config' => $config
-		));
-    }
+	public function get_settings($campaign, $template_name = 'settings')
+	{		
+		if (!in_array($template_name, ['tracker-settings', 'fields-settings'])) return;
+		global $wpdb;
+		$config = $wpdb->get_row(
+			$wpdb->prepare('SELECT * FROM ' . $wpdb->prefix . 'appq_integration_center_config WHERE campaign_id = %d AND integration = %s', $campaign->id, $this->integration['slug'])
+		);
+
+		$this->partial($template_name, [
+			'config' => $config,
+			'campaign_id' => $campaign->id
+		]);
+	}
 
 	/**
 	 * Return admin partial path
@@ -162,6 +165,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		return $wpdb->get_results($sql);
 	}
 
+	public function current_setup( $campaign = null )
+	{
+		$this->partial( 'settings/current-setup', [ 'campaign' => $campaign ] );
+	}
+
 	/**
 	 * Save CSV Export fields based on campaign ID and fields
 	 * @method save_csv_export (AJAX)
@@ -172,7 +180,10 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	 */
 	public function save_csv_export() {
 		$cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
-		$field_keys = isset( $_POST[ "field_keys" ] ) && !empty( $_POST[ "field_keys" ] ) ? CsvInspector::sanitize_array( $_POST[ "field_keys" ] ) : false;
+		$field_keys = isset( $_POST[ "field_keys" ] ) && !empty( $_POST[ "field_keys" ] ) ? $_POST[ "field_keys" ] : '';
+		$endpoint = array_key_exists('csv_endpoint', $_POST) ? $_POST['csv_endpoint'] : '';
+		$apikey = array_key_exists('csv_apikey', $_POST) ? $_POST['csv_apikey'] : '';
+		$upload_media = (array_key_exists('media', $_POST) && $_POST['media']) ? $_POST['media'] : false;
 
 		$result = new stdClass;
 		$result->success = false;
@@ -200,14 +211,22 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 					$wpdb->update(
 						$appq_integration_center_config,
 						array(
-							"field_mapping" => json_encode( $field_keys )
+							"field_mapping" => $field_keys,
+							"endpoint" 		=> $endpoint,
+							"apikey"		=> $apikey,
+							"is_active"		=> 1,
+							"upload_media"	=> $upload_media
 						),
 						array(
 							"campaign_id" => $cp_id,
 							"integration" => $this->integration[ "slug" ]
 						),
 						array(
-							"%s"
+							"%s",
+							"%s",
+							"%s",
+							"%d",
+							"%d"
 						),
 						array(
 							"%d",
@@ -220,7 +239,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 						array(
 							"campaign_id" => $cp_id,
 							"integration" => $this->integration[ "slug" ],
-							"field_mapping" => json_encode( $field_keys )
+							"field_mapping" => $field_keys
 						),
 						array(
 							"%d",
@@ -232,11 +251,10 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 				
 				// Init Result
 				$result->success = true;
-				$result->download_url = $export_url;
 				$result->messages[] = array( "type" => "success", "message" => "Your fields are saved successfully!" );
 			}
 		} else {
-			$result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID." );
+			$result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID.");
 		}
 		
 		echo json_encode( $result );

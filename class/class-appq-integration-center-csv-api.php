@@ -7,6 +7,20 @@ class CSVRestApi extends IntegrationCenterRestApi
         $this->_CAMPAIGN_ID = $cp_id;
         
         parent::__construct( $cp_id, "csv_exporter", "Csv Export" );
+
+        $basic_configuration = new stdClass;
+        foreach ( $this->mappings as $key => $value ) {
+            $slug = $value['prop'];
+            $obj = new stdClass;
+            $obj->value = $key;
+            $obj->description = $value['description'];
+            $obj->key = $value['prop'];
+            $obj->selected = 0;
+
+            $basic_configuration->$slug = $obj;
+        }
+
+        $this->basic_configuration = $basic_configuration;
     }
 
     function csv_bug_upload( $bug_id ) {
@@ -38,14 +52,14 @@ class CSVRestApi extends IntegrationCenterRestApi
     }
 
     /**
-	 * Get saved selected fields for the given Campaign ID
-	 * @method get_selected_fields
+	 * Get saved fields for the given Campaign ID
+	 * @method get_fields
 	 * @date   2020-12-14
 	 * @author: Gero Nikolov <gerthrudy>
 	 * @param int $campaign_id
-	 * @return array (STRING) $result
+	 * @return array $result
 	 */
-	public function get_selected_fields( $campaign_id = 0 ) {
+	public function get_fields( $campaign_id = 0 ) {
 		$campaign_id = intval( $campaign_id ) > 0 ? intval( $campaign_id ) : $this->_CAMPAIGN_ID;
 		$result = array();
 
@@ -61,10 +75,50 @@ class CSVRestApi extends IntegrationCenterRestApi
 
 			// Parse the Results into meaningful fields if needed
 			if ( !empty( $results_ ) ) {
-				$result = json_decode( $results_[ 0 ]->field_mapping );
+				$result = json_decode(html_entity_decode(stripslashes($results_[ 0 ]->field_mapping)));
 			}
 		}
 
+        // Clean empty result
+        if ($result == "[]" || $result == "{}") $result = array();
+
 		return $result;
+	}
+
+    /**
+	 * Get saved selected fields for the given Campaign ID
+	 * @method get_selected_fields
+	 * @date   2020-12-14
+	 * @author: Gero Nikolov <gerthrudy>
+	 * @param int $campaign_id
+	 * @return array $result
+	 */
+	public function get_selected_fields( $campaign_id = 0 ) {
+		$campaign_id = intval( $campaign_id ) > 0 ? intval( $campaign_id ) : $this->_CAMPAIGN_ID;
+		$result = array();
+        $selected_fields = array();
+
+		if ( $campaign_id > 0 ) {
+			global $wpdb;
+			$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+
+			// Check if the Campaign was already stored
+			$results_ = $wpdb->get_results(
+				$wpdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+				OBJECT
+			);
+
+			// Parse the Results into meaningful fields if needed
+			if ( !empty( $results_[ 0 ]->field_mapping ) ) {
+				$result = json_decode(html_entity_decode(stripslashes($results_[ 0 ]->field_mapping)));
+                foreach ($result as $k => $v) {
+                    if ($v->selected) {
+                        $selected_fields[$k] = $v;
+                    }
+                }
+			}
+		}
+
+		return $selected_fields;
 	}
 }

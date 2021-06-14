@@ -5,6 +5,7 @@ var $integrationCenterButtons = {
     sendSingle: null
 };
 var $bugTracker;
+var $csvSettingsForm;
 
 var bugIDs = [];
 var inspectionIDs = [];
@@ -19,7 +20,8 @@ jQuery( document ).ready( function() {
     $integrationCenterButtons.sendAll = $bugsListContainer.find( ".send-all" );
     $integrationCenterButtons.sendSelected = $bugsListContainer.find( ".send-selected" );
     $integrationCenterButtons.sendSingle = $bugsListContainer.find( "table" );
-    $bugTracker = jQuery( "#general_settings [name='bugtracker']" );
+    $bugTracker = jQuery( "#setup_manually_cp [name='bugtracker']" );
+    $csvSettingsForm = jQuery('#csv_tracker_settings');
 
     // Init Methods
     $availableFieldsContainer.on( "click", "span", clickAvailableField );

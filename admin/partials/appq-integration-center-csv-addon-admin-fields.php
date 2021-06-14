@@ -12,30 +12,50 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 
-$api = new IntegrationCenterRestApi( $cp_id, null, null );
+$cp_id = $_GET[ "id" ];
 $CSVRestApi = new CSVRestApi( $cp_id );
 $custom_fields = $this->get_custom_fields( $cp_id );
 $selected_fields = $CSVRestApi->get_selected_fields( $cp_id );
+
+$data = array();
+if (!empty($fields = $CSVRestApi->get_fields())) {
+	$data = $fields;
+} else {
+	$data = $CSVRestApi->basic_configuration;
+}
+
 ?>
+
 <div class="row">
-    <h4 class="col-sm-12">Available fields</h4>
+    <h4 class="col-sm-12">SELECT FIELDS TO EXPORT</h4>
     <div id="available-fields" class="col-sm-12 available_fields csv-fields">
         <?php 
-        foreach ( $api->mappings as $key => $value ) {
+        foreach ( $data as $key => $value ) {
         ?>
 		    
-            <span class='<?= array_key_exists('type',$value) ? $value['type'] : '' ?> <?= in_array( $key, $selected_fields ) ? "selected" : ""; ?>' data-key="<?= $key ?>"> <?= $key ?> - <?= $value['description'] ?> </span> 
+            <span class='field <?= array_key_exists( $key, $selected_fields ) ? "selected" : ""; ?>' 
+                data-key="<?= $key ?>"
+                data-value="<?= $value->value ?>"
+                data-description="<?= $value->description ?>">
+                    <?= $value->value ?> 
+            </span>
 		
         <?php 
-        } 
+        }
         
-        foreach ( $custom_fields as $custom_field ) { 
+        /*foreach ( $custom_fields as $custom_field ) { 
         ?>
         
-            <span data-map="<?= esc_attr($custom_field->map) ?>" data-source="<?= esc_attr($custom_field->source) ?>" data-name="<?= esc_attr($custom_field->name) ?>" data-key="<?= $custom_field->name ?>" class="custom <?= in_array( $custom_field->name, $selected_fields ) ? "selected" : ""; ?>"><?= $custom_field->name ?></span>
+            <span class="field custom <?= in_array( $custom_field->name, $selected_fields ) ? "selected" : ""; ?>"
+                data-map="<?= esc_attr($custom_field->map) ?>" 
+                data-source="<?= esc_attr($custom_field->source) ?>" 
+                data-name="<?= esc_attr($custom_field->name) ?>" 
+                data-key="<?= $custom_field->name ?>">
+                    <?= $custom_field->name ?>
+            </span>
         
         <?php 
-        } 
+        }*/
         ?>
     </div>
 </div>

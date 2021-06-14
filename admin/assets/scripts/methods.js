@@ -12,12 +12,21 @@ function clickSaveCSVExport() {
     jQuery( this ).addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
     // Collect all of the selected fields
-    let fieldKeys = [];
-    if ( $availableFieldsContainer.find( ".selected" ).length > 0 ) {
-        $availableFieldsContainer.find( ".selected" ).each( function(){
-            fieldKeys.push( jQuery( this ).data( "key" ) );
-        } );
-    }
+    let fieldKeys = {};
+    $availableFieldsContainer.find( ".field" ).each( function() {
+        let data = {};
+        data['value'] = jQuery( this ).data( "value" );
+        data['description'] = jQuery( this ).data( "description" );
+        data['key'] = jQuery( this ).data( "key" );
+        if (jQuery( this ).hasClass('selected')) {
+            data['selected'] = 1;
+        } else {
+            data['selected'] = 0;
+        }
+        fieldKeys[jQuery( this ).data( "key" )] = data;
+    } );
+
+    let jsonFieldKeys = JSON.stringify(fieldKeys);
 
     // Perform an AJAX Call
     jQuery.ajax( {
@@ -26,7 +35,7 @@ function clickSaveCSVExport() {
         data: {
             action: "save_csv_export",
             cp_id: cp_id,
-            field_keys: fieldKeys
+            field_keys: jsonFieldKeys
         },
         success: function( response ) {
             // Unlock the buton
@@ -41,6 +50,8 @@ function clickSaveCSVExport() {
                         toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
                     }
                 }
+
+                location.reload();
             }
         },
         error: function( response ) {
@@ -51,7 +62,7 @@ function clickSaveCSVExport() {
 
 function clickSend( event ) {
     // Check if the Bug Tracker is set to CSV Exporter
-    if ( jQuery( "#general_settings [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
+    if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
 
     // Get the Bug ID
     let bugID = jQuery( this ).data( "bug-id" );
