@@ -11,6 +11,9 @@ function clickSaveCSVExport() {
     // Lock the Button
     jQuery( this ).addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
+    // Get format select value
+    let exportFormat = $availableFormatsSelect.val();
+
     // Collect all of the selected fields
     let fieldKeys = {};
     $availableFieldsContainer.find( ".field" ).each( function() {
@@ -35,7 +38,8 @@ function clickSaveCSVExport() {
         data: {
             action: "save_csv_export",
             cp_id: cp_id,
-            field_keys: jsonFieldKeys
+            field_keys: jsonFieldKeys,
+            csv_endpoint: exportFormat
         },
         success: function( response ) {
             // Unlock the buton
@@ -82,11 +86,12 @@ function saveCSVExport() {
         // Reset the Setup
         sendClicked = false;
         clearInterval( bugCollectorInterval );
-        
+
         // Invoke the CSV Download
         jQuery.ajax( {
             url: ajaxurl,
             type: "POST",
+            headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
                 action: "download_csv_export",
                 cp_id: cp_id,
@@ -105,7 +110,21 @@ function saveCSVExport() {
                     }
 
                     // Invoke the Download upon success
-                    if ( result.success ) { window.open( result.download_url ); }
+                    if ( result.success ) { 
+                        // window.open( result.download_url ); 
+                        let link = document.createElement("a");
+                        if (result.format == "csv_format") {
+                            link.download = "export.csv";
+                        } else if (result.format == "xml_format") {
+                            link.download = "export.xml";
+                        }
+                        link.href = result.download_url;
+                        document.body.appendChild(link);
+                        link.click();
+                        setTimeout(function() {
+                            document.body.removeChild(link);
+                        }, 50);
+                    }
                 }
             },
             error: function( response ) {

@@ -2,6 +2,7 @@
 class CSVRestApi extends IntegrationCenterRestApi
 {
     private $_CAMPAIGN_ID;
+	private $_format;
 
     function __construct( $cp_id ) {
         $this->_CAMPAIGN_ID = $cp_id;
@@ -88,10 +89,10 @@ class CSVRestApi extends IntegrationCenterRestApi
     /**
 	 * Get saved selected fields for the given Campaign ID
 	 * @method get_selected_fields
-	 * @date   2020-12-14
-	 * @author: Gero Nikolov <gerthrudy>
+	 * @date   2021-06-14
+	 * @author: Marco Bonomo <marcbon>
 	 * @param int $campaign_id
-	 * @return array $result
+	 * @return array $selected_fields
 	 */
 	public function get_selected_fields( $campaign_id = 0 ) {
 		$campaign_id = intval( $campaign_id ) > 0 ? intval( $campaign_id ) : $this->_CAMPAIGN_ID;
@@ -120,5 +121,29 @@ class CSVRestApi extends IntegrationCenterRestApi
 		}
 
 		return $selected_fields;
+	}
+
+	/**
+	 * Get saved export file format for the given Campaign ID
+	 * @method get_format
+	 * @date   2021-06-14
+	 * @author: Marco Bonomo <marcbon>
+	 * @param int $campaign_id
+	 * @return string $format
+	 */
+
+	public function get_format($campaign_id = 0) {
+		global $wpdb;
+		$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+
+		// Check if the Campaign was already stored
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT endpoint FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+			OBJECT
+		);
+
+		$format = $results[0]->endpoint;
+
+		return $format;
 	}
 }

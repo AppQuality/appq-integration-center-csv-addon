@@ -16,6 +16,7 @@ jQuery( document ).ready( function() {
     // Cache Containers
     $bugsListContainer = jQuery( "#bugs_list" );
     $availableFieldsContainer = jQuery( "#available-fields" );
+    $availableFormatsSelect = jQuery("#available-formats");
     $saveCSVExport = jQuery( "#save-csv-export" );
     $integrationCenterButtons.sendAll = $bugsListContainer.find( ".send-all" );
     $integrationCenterButtons.sendSelected = $bugsListContainer.find( ".send-selected" );
@@ -27,4 +28,6 @@ jQuery( document ).ready( function() {
     $availableFieldsContainer.on( "click", "span", clickAvailableField );
     $saveCSVExport.on( "click", clickSaveCSVExport );
     $integrationCenterButtons.sendSingle.on( "click", ".upload_bug", { type: "sendSingle" }, clickSend );
+    $integrationCenterButtons.sendSelected.on("click", {type: "sendSelected"}, clickSend);
+    $integrationCenterButtons.sendAll.on("click", {type: "sendAll"}, clickSend);
 } );

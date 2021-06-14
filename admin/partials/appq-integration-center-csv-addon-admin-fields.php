@@ -16,7 +16,6 @@ $cp_id = $_GET[ "id" ];
 $CSVRestApi = new CSVRestApi( $cp_id );
 $custom_fields = $this->get_custom_fields( $cp_id );
 $selected_fields = $CSVRestApi->get_selected_fields( $cp_id );
-
 $data = array();
 if (!empty($fields = $CSVRestApi->get_fields())) {
 	$data = $fields;
@@ -27,25 +26,28 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
 ?>
 
 <div class="row">
+    <h4 class="col-sm-12">SELECT FILE FORMAT</h4>
+    <select id="available-formats">
+        <option value="csv_format">CSV</option>
+        <option value="xml_format">XML</option>
+    </select>
+</div>
+<div class="row">
     <h4 class="col-sm-12">SELECT FIELDS TO EXPORT</h4>
     <div id="available-fields" class="col-sm-12 available_fields csv-fields">
         <?php 
         foreach ( $data as $key => $value ) {
         ?>
-		    
             <span class='field <?= array_key_exists( $key, $selected_fields ) ? "selected" : ""; ?>' 
                 data-key="<?= $key ?>"
                 data-value="<?= $value->value ?>"
                 data-description="<?= $value->description ?>">
                     <?= $value->value ?> 
             </span>
-		
         <?php 
         }
-        
         /*foreach ( $custom_fields as $custom_field ) { 
         ?>
-        
             <span class="field custom <?= in_array( $custom_field->name, $selected_fields ) ? "selected" : ""; ?>"
                 data-map="<?= esc_attr($custom_field->map) ?>" 
                 data-source="<?= esc_attr($custom_field->source) ?>" 
@@ -53,12 +55,11 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
                 data-key="<?= $custom_field->name ?>">
                     <?= $custom_field->name ?>
             </span>
-        
         <?php 
         }*/
         ?>
     </div>
 </div>
 <script type="text/javascript">
-var cp_id = JSON.parse( '<?php echo json_encode( $cp_id ); ?>' );
+    var cp_id = JSON.parse( '<?php echo json_encode( $cp_id ); ?>' );
 </script>

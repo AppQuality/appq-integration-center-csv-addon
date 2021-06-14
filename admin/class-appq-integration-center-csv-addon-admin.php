@@ -303,8 +303,6 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 				}
 
 				if ( $is_valid_request ) {
-					$export_path = plugin_dir_path( __FILE__ ) ."files/export.csv";
-					$export_url = plugin_dir_url( __FILE__ ) ."files/export.csv";
 					$CSV_API = new CSVRestApi( $cp_id );
 					$csv_data = array();
 
@@ -316,7 +314,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
 						// Fill the Bug Data
 						foreach ( $field_keys as $field_key ) {
-							$data = $CSV_API->bug_data_replace( $bug, $field_key );
+							$data = $CSV_API->bug_data_replace( $bug, $field_key->value );
 							$csv_data[ $bug_id ][] = !empty( $data ) ? $data : "";
 						}
 					}
@@ -324,20 +322,57 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 					// Convert Keys to titles
 					$titles = array();
 					foreach ( $field_keys as $key ) {
-						$titles[] = isset( $CSV_API->mappings[ $key ] ) && !empty( $CSV_API->mappings[ $key ] ) ? $CSV_API->mappings[ $key ][ "description" ] : $key;
+						$index = $key->key;
+						$titles[] = isset( $CSV_API->basic_configuration->$index ) ? $CSV_API->basic_configuration->$index->description : $key->description;
 					}
 
-					// Generate the File
-					$fp = fopen( $export_path, 'w' );
-					fputcsv( $fp, $titles );
-					foreach ( $csv_data as $bug_data ) {
-						fputcsv( $fp, $bug_data );
+					// Check file format 
+					$file_format = $CSV_API->get_format($cp_id);
+					switch($file_format) {
+						case "csv_format":
+							$export_path = plugin_dir_path( __FILE__ ) ."files/export.csv";
+							$export_url = plugin_dir_url( __FILE__ ) ."files/export.csv";
+							
+							// Generate the CSV file
+							$fp = fopen( $export_path, 'w' );
+							fputcsv( $fp, $titles );
+							foreach ( $csv_data as $bug_data ) {
+								fputcsv( $fp, $bug_data );
+							}
+							fclose( $fp );
+
+							break;
+						case "xml_format":
+							$export_path = plugin_dir_path( __FILE__ ) ."files/export.xml";
+							$export_url = plugin_dir_url( __FILE__ ) ."files/export.xml";
+
+							// Generate XML file
+							$xml = new SimpleXMLElement('<xml/>');
+							foreach ($csv_data as $bug_id => $field_value) {
+								$bug = $xml->addChild('bug');
+								$bug->addAttribute('id', $bug_id);
+								foreach ($field_value as $index => $value) {
+									$field = $bug->addChild('field');
+									$field->addChild('name', $titles[$index]);
+									$field->addChild('value', $value);
+								}
+							}
+							
+							// Save XML file
+							$dom = new DOMDocument('1,0');
+							$dom->preserveWhiteSpace = false;
+							$dom->formatOutput = true;
+							$dom->loadXML($xml->asXML());
+							$dom->saveXML();
+							$dom->save($export_path);
+
+							break;
 					}
-					fclose( $fp );
 
 					// Init Result
 					$result->success = true;
 					$result->download_url = $export_url;
+					$result->format = $file_format;
 					$result->messages[] = array( "type" => "success", "message" => "Your export will be downloaded soon!" );
 				}
 			}
