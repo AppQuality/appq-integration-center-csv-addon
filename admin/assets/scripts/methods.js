@@ -33,7 +33,7 @@ function clickSaveCSVExport() {
 
     // Perform an AJAX Call
     jQuery.ajax( {
-        url: ajaxurl,
+        url: custom_object.ajax_url,
         type: "POST",
         data: {
             action: "save_csv_export",
@@ -89,13 +89,19 @@ function saveCSVExport() {
 
         // Invoke the CSV Download
         jQuery.ajax( {
-            url: ajaxurl,
+            url: custom_object.ajax_url,
             type: "POST",
             headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
                 action: "download_csv_export",
                 cp_id: cp_id,
                 bug_ids: bugIDs
+            },
+            beforeSend: function() {
+                if (!enableBugUpload) {
+                    // Reset exported check flag
+                    jQuery('#bugs_list .is_uploaded .fa-check').remove();
+                }
             },
             success: function( response ) {
                 // Parse Result
@@ -124,11 +130,25 @@ function saveCSVExport() {
                         setTimeout(function() {
                             document.body.removeChild(link);
                         }, 50);
+
+                        if (!enableBugUpload) {
+                            // Reset selected bug for export
+                            jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                            jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                            jQuery('#bugs_list .check:checked').prop('checked', false);
+                        }
                     }
                 }
             },
             error: function( response ) {
                 console.log( response );
+
+                if (!enableBugUpload) {
+                    // Reset selected bug for export
+                    jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                    jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                    jQuery('#bugs_list .check:checked').prop('checked', false);
+                }
             }
         } );
 
@@ -138,4 +158,45 @@ function saveCSVExport() {
     } else { // Equalize the inspectionIDs with the bugIDs and proceed with the syncing
         inspectionIDs = bugIDs;
     }
+}
+
+function newFieldMapping() {
+    let key = jQuery('#add_mapping_field_modal #mapping_modal_key').val();
+    let value = jQuery('#custom_mapping_name').val();
+
+    if (!key || !value) { return; }
+
+    // Invoke the CSV Download
+    jQuery.ajax( {
+        url: custom_object.ajax_url,
+        type: "POST",
+        data: {
+            action: "new_field_mapping",
+            cp_id: cp_id,
+            key: key,
+            value: value
+        },
+        success: function( response ) {
+            // Parse Result
+            if ( typeof response !== "undefined" ) {
+                let result = JSON.parse( response );
+
+                // Present Messages
+                if ( result.messages.length > 0 ) {
+                    for ( let key in result.messages ) {
+                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    }
+                }
+
+                location.reload();
+            }
+        },
+        error: function( response ) {
+            console.log( response );
+        }
+    } );
+}
+
+function editModalHandler() {
+    jQuery('#add_mapping_field_modal #mapping_modal_key').val(jQuery(this).data('key'));
 }

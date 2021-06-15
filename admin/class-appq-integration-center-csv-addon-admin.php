@@ -25,10 +25,10 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	 * The ID of this plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   public
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $plugin_name;
+	public $plugin_name;
 
 	/**
 	 * The version of this plugin.
@@ -81,11 +81,14 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts($hook) {
-		if (strpos($hook, 'integration-center') !== false)
-		{
-			wp_enqueue_script( "appq-integration-center-csv-addon-methods-js", plugins_url( "/assets/scripts/methods.js" , __FILE__ ), array( "jquery" ), $this->version, true );
-			wp_enqueue_script( "appq-integration-center-csv-addon-admin-js", plugins_url( "/assets/scripts/admin.js" , __FILE__ ), array( "jquery" ), $this->version, true );
+	public function enqueue_scripts($hook)
+	{
+		if (strpos($hook, 'integration-center') !== false) {
+			wp_enqueue_script($this->plugin_name . '-methods', plugin_dir_url(__FILE__) . 'assets/scripts/methods.js', array('jquery'), $this->version);
+			wp_enqueue_script($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . 'assets/scripts/admin.js', array('jquery'), $this->version);
+			wp_localize_script($this->plugin_name, 'custom_object', array(
+				'ajax_url' => admin_url('admin-ajax.php')
+			));
 		}
 	}
 
@@ -184,6 +187,9 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		$endpoint = array_key_exists('csv_endpoint', $_POST) ? $_POST['csv_endpoint'] : '';
 		$apikey = array_key_exists('csv_apikey', $_POST) ? $_POST['csv_apikey'] : '';
 		$upload_media = (array_key_exists('media', $_POST) && $_POST['media']) ? $_POST['media'] : false;
+
+		// Clean json encoding slashes
+		$field_keys = str_replace("\\", "", $field_keys);
 
 		$result = new stdClass;
 		$result->success = false;
@@ -315,15 +321,15 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 						// Fill the Bug Data
 						foreach ( $field_keys as $field_key ) {
 							$data = $CSV_API->bug_data_replace( $bug, $field_key->value );
-							$csv_data[ $bug_id ][] = !empty( $data ) ? $data : "";
+							$csv_data[ $bug_id ][] = !empty( $data ) ? strip_tags($data) : "";
 						}
 					}
 
 					// Convert Keys to titles
 					$titles = array();
-					foreach ( $field_keys as $key ) {
-						$index = $key->key;
-						$titles[] = isset( $CSV_API->basic_configuration->$index ) ? $CSV_API->basic_configuration->$index->description : $key->description;
+					foreach ($field_keys as $key => $value) {
+						$index = $key;
+						$titles[] = isset( $CSV_API->basic_configuration->$index ) ? $CSV_API->basic_configuration->$index->key : $key;
 					}
 
 					// Check file format 
@@ -335,6 +341,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 							
 							// Generate the CSV file
 							$fp = fopen( $export_path, 'w' );
+							fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // Force UTF-8 encode
 							fputcsv( $fp, $titles );
 							foreach ( $csv_data as $bug_data ) {
 								fputcsv( $fp, $bug_data );
@@ -382,5 +389,70 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 		
 		echo json_encode( $result );
 		die( "" );
+	}
+
+	public function new_field_mapping() {
+		$cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
+		$key = isset( $_POST[ "key" ] ) && !empty( $_POST[ "key" ] ) ? $_POST[ "key" ] : "";
+		$value = isset( $_POST[ "value" ] ) && !empty( $_POST[ "value" ] ) ? $_POST[ "value" ] : "";
+
+		$result = new stdClass;
+		$result->success = false;
+		$result->messages = array();
+
+		if (empty($cp_id)) {
+			$result->messages[] = array( "type" => "error", "message" => "Missing Campaign ID." );
+		} else if (empty($key)) {
+			$result->messages[] = array( "type" => "error", "message" => "Missing Field to update." );
+		} else if (empty($value)) {
+			$result->messages[] = array( "type" => "error", "message" => "Missing Value for field to update." );
+		} else {
+			global $wpdb;
+			$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+
+			// Check if the Integration was already stored for the campaign
+			$results_ = $wpdb->get_results(
+				$wpdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
+				OBJECT
+			);
+
+			if (empty($results_)) {
+				$result->messages[] = array( "type" => "error", "message" => "Set tracker settings first." );
+			} else { // Update the field mapping
+				$field_mapping = json_decode($results_[0]->field_mapping);
+				foreach ($field_mapping as $field_key => $field_value) {
+					if ($field_key == $key) {
+						unset($field_mapping->$key);
+						$field_mapping->$value = $field_value;
+						break;
+					}
+				}
+
+				$wpdb->update(
+					$appq_integration_center_config,
+					array(
+						"field_mapping" => json_encode($field_mapping),
+					),
+					array(
+						"campaign_id" => $cp_id,
+						"integration" => $this->integration["slug"]
+					),
+					array(
+						"%s",
+					),
+					array(
+						"%d",
+						"%s"
+					)
+				);
+
+				// Init Result
+				$result->success = true;
+				$result->messages[] = array( "type" => "success", "message" => "Your fields are saved successfully!" );
+			}
+		}
+
+		echo json_encode($result);
+		die("");
 	}
 }

@@ -12,8 +12,8 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 
-$cp_id = $_GET[ "id" ];
 $CSVRestApi = new CSVRestApi( $cp_id );
+$file_format = $CSVRestApi->get_format($cp_id);
 $custom_fields = $this->get_custom_fields( $cp_id );
 $selected_fields = $CSVRestApi->get_selected_fields( $cp_id );
 $data = array();
@@ -25,15 +25,15 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
 
 ?>
 
-<div class="row">
-    <h4 class="col-sm-12">SELECT FILE FORMAT</h4>
-    <select id="available-formats">
-        <option value="csv_format">CSV</option>
-        <option value="xml_format">XML</option>
+<div class="row mt-5">
+    <h4 class="mb-3">SELECT FILE FORMAT</h4>
+    <select id="available-formats" name="available_formats" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="Select File Format" data-select2-id="5" tabindex="-1" aria-hidden="true">
+        <option value="csv_format" <?= ($file_format == "csv_format") ? "selected='selected'": "" ?>>CSV</option>
+        <option value="xml_format" <?= ($file_format == "xml_format") ? "selected='selected'": "" ?>>XML</option>
     </select>
 </div>
-<div class="row">
-    <h4 class="col-sm-12">SELECT FIELDS TO EXPORT</h4>
+<div class="row mt-5">
+    <h4>SELECT FIELDS TO EXPORT</h4>
     <div id="available-fields" class="col-sm-12 available_fields csv-fields">
         <?php 
         foreach ( $data as $key => $value ) {
@@ -42,21 +42,10 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
                 data-key="<?= $key ?>"
                 data-value="<?= $value->value ?>"
                 data-description="<?= $value->description ?>">
-                    <?= $value->value ?> 
+                    <?= $key ?> 
             </span>
         <?php 
         }
-        /*foreach ( $custom_fields as $custom_field ) { 
-        ?>
-            <span class="field custom <?= in_array( $custom_field->name, $selected_fields ) ? "selected" : ""; ?>"
-                data-map="<?= esc_attr($custom_field->map) ?>" 
-                data-source="<?= esc_attr($custom_field->source) ?>" 
-                data-name="<?= esc_attr($custom_field->name) ?>" 
-                data-key="<?= $custom_field->name ?>">
-                    <?= $custom_field->name ?>
-            </span>
-        <?php 
-        }*/
         ?>
     </div>
 </div>

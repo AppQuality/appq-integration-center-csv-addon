@@ -3,6 +3,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 {
     private $_CAMPAIGN_ID;
 	private $_format;
+	private $_enable_bug_upload = false;
 
     function __construct( $cp_id ) {
         $this->_CAMPAIGN_ID = $cp_id;
@@ -25,29 +26,37 @@ class CSVRestApi extends IntegrationCenterRestApi
     }
 
     function csv_bug_upload( $bug_id ) {
-        global $wpdb;
-        $response = array(
-            "status" => false,
-            "message" => "Error on bug status update"
-        );
+		if ($this->_enable_bug_upload) {
+			global $wpdb;
+			$response = array(
+				"status" => false,
+				"message" => "Error on bug status update"
+			);
 
-        $bug_id = intval( $bug_id );
-        
-        if ( 
-            $bug_id > 0 &&
-            !empty( $this->get_selected_fields() )
-        ) {
-            $res = $wpdb->insert($wpdb->prefix . 'appq_integration_center_bugs', array(
-                'bug_id' => $bug_id,
-                'bugtracker_id' => null,
-                'integration' => $this->integration["slug"],
-            ));
+			$bug_id = intval( $bug_id );
+			
+			if ( 
+				$bug_id > 0 &&
+				!empty( $this->get_selected_fields() )
+			) {
+				$res = $wpdb->insert($wpdb->prefix . 'appq_integration_center_bugs', array(
+					'bug_id' => $bug_id,
+					'bugtracker_id' => null,
+					'integration' => $this->integration["slug"],
+				));
 
-            if( !is_null( $res ) ) {
-                $response[ "status" ] = true;
-                $response[ "message" ] = "Status updated correctly";
-            }
-        }
+				if( !is_null( $res ) ) {
+					$response[ "status" ] = true;
+					$response[ "message" ] = "Status updated correctly";
+				}
+			}
+		} else {
+			// Skip bug upload process
+			$response = array(
+				"status" => true,
+				"message" => ""
+			);
+		}		
 
         return $response;
     }

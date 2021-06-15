@@ -19,8 +19,8 @@
                 <h3 class="mt-1 mb-3">CSV Exporter</h3>
                 
                 <?php
-                $cp_id = isset( $_GET[ "id" ] ) && !empty( $_GET[ "id" ] ) && intval( $_GET[ "id" ] ) > 0 ? intval( $_GET[ "id" ] ) : false;
-                
+                $cp_id = $campaign_id;
+
                 if ( empty( $cp_id ) ) {
                 ?>
 

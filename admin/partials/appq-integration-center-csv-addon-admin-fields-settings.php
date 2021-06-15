@@ -12,14 +12,14 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 
-$field_mapping = !empty($config) ? json_decode($config->field_mapping,true) : array();
+$field_mapping = !empty($config) ? json_decode($config->field_mapping) : array();
 if (empty($field_mapping)) {
     $field_mapping = array();
 }
 
 $endpoint_data = !empty($config) && property_exists($config,'endpoint') ? json_decode($config->endpoint,true) : array();
 ?>
-<div id="jira_fields_settings">
+<div id="csv_fields_settings">
 	<?php 
 	$this->partial('settings/field-mapping', array(
 		'field_mapping' => $field_mapping,

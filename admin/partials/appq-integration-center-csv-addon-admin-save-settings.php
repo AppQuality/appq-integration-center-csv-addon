@@ -12,13 +12,14 @@
  * @subpackage Appq_Integration_Center_Internal_Addon/admin/partials
  */
 ?>
-<div class="row">
-    <div class="col">
-        <div class="mt-4">
-            <button id="save-csv-export" type="button" class="btn btn-primary">
-                <i class="fa fa-spin"></i>
-                Save fields
-            </button>
-        </div>
+<div class="row mt-5">
+    <div class="col-6 col-lg-4 offset-lg-2 text-right">
+        <button id="save-csv-export" type="button" class="btn btn-primary">
+            <i class="fa fa-spin"></i>
+            Save Settings
+        </button>
+    </div>
+    <div class="col-6 col-lg-4">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Cancel">Cancel</button>
     </div>
 </div>

@@ -1,2 +1,2 @@
-.csv-fields span{cursor:pointer}.selected{color:#31708f;background:#d9edf7 !important;border-color:#bce8f1 !important}#integration-logo{width:50px}
+.csv-fields span{cursor:pointer}.selected{color:#31708f;background:#d9edf7 !important;border-color:#bce8f1 !important}#integration-logo{width:75%}.settings-group.available_fields{display:none !important}#setup_manually_cp > .row button.confirm, #setup_manually_cp > .row button[data-dismiss="modal"] {display: none !important}#available-formats{margin:10px 15px;padding:5px 10px;cursor:pointer;}
 /*# sourceMappingURL=admin.css.map */
