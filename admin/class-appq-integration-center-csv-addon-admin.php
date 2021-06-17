@@ -257,7 +257,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 				
 				// Init Result
 				$result->success = true;
-				$result->messages[] = array( "type" => "success", "message" => "Your fields are saved successfully!" );
+				$result->messages[] = array( "type" => "success", "message" => "Tracker settings updated!" );
 			}
 		} else {
 			$result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID.");

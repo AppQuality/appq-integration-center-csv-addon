@@ -15,6 +15,7 @@ var bugCollectorInterval = false;
 var enableBugUpload = false; // Flag to reset the "is_uploaded" process: connected to class attribute CSVRestApi->_enable_bug_upload
 var $newMappingButton;
 var $editMappingModalButton;
+var $submitButton;
 
 jQuery( document ).ready( function() {
     // Cache Containers
@@ -29,10 +30,11 @@ jQuery( document ).ready( function() {
     $csvSettingsForm = jQuery('#csv_tracker_settings');
     $newMappingButton = jQuery('#add_new_mapping_field');
     $editMappingModalButton = jQuery('#csv_fields_settings button[data-toggle="modal"][data-target="#add_mapping_field_modal"]');
+    $submitButton = jQuery('#setup_manually_cp').find('button.confirm');
 
     // Init Methods
     $availableFieldsContainer.on( "click", ".field", clickAvailableField );
-    $saveCSVExport.on( "click", clickSaveCSVExport );
+    $submitButton.on('click', clickSaveCSVExport);
     $integrationCenterButtons.sendSingle.on( "click", ".upload_bug", clickSend );
     $integrationCenterButtons.sendSelected.on("click", clickSend);
     $integrationCenterButtons.sendAll.on("click", clickSend);

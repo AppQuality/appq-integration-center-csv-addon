@@ -18,19 +18,13 @@
     display:none !important;
 }
 
-#setup_manually_cp {
-    > .row {
-        button {
-            .confirm,
-            [data-dismiss="modal"] {
-                display: none !important;
-            }
-        }
-    }
-}
-
 #available-formats{
     margin: 10px 15px;
     padding: 5px 10px;
     cursor: pointer;
+}
+
+#bugs_list button.upload_bug {
+    text-decoration: none;
+    padding-top: 0;
 }

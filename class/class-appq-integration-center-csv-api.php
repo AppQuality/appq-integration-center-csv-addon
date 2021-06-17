@@ -17,7 +17,7 @@ class CSVRestApi extends IntegrationCenterRestApi
             $obj->value = $key;
             $obj->description = $value['description'];
             $obj->key = $value['prop'];
-            $obj->selected = 0;
+            $obj->selected = 1;
 
             $basic_configuration->$slug = $obj;
         }
