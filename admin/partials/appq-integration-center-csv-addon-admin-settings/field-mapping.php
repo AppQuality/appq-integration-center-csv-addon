@@ -32,7 +32,7 @@ if (!empty($field_mapping)) {
 				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('The description of the field', $this->plugin_name) ?>"></i>
 			</small>
         </div>
-		<div class="col-2">
+		<div class="col-2 text-center">
 			<small>
 				<strong><?= __('Selected', $this->plugin_name); ?></strong>
 				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('If the field has been selected for the export', $this->plugin_name) ?>"></i>
@@ -44,7 +44,7 @@ if (!empty($field_mapping)) {
 			<?php $this->partial('settings/field-mapping-row', array(
 				'_item' => $item,
 				'_key' => $key,
-				'_selected_icon' => ($item->selected ? true : false)  
+				'_selected_icon' => ($item->selected ? true : false)
 					? '<i style="color: #62aa4e;" class="fa fa-check"></i>'
 					: ''
 			)); ?>

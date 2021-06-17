@@ -16,8 +16,7 @@
     <div class="container">
         <div class="row">
             <div class="col col-md-10">
-                <h3 class="mt-1 mb-3">CSV Exporter</h3>
-                
+
                 <?php
                 $cp_id = $campaign_id;
 
@@ -27,8 +26,8 @@
                 <div class="alert alert-warning" role="alert">
                     In order to be able to export CSVs you should specify the <strong>Campaign ID</strong> first.
                 </div>
-                
-                <?php 
+
+                <?php
                 } else {
                     if ( CsvInspector::has_bugs( $cp_id ) ) {
                         $this->partial( "fields", array( "cp_id" => $cp_id ) );
@@ -39,7 +38,7 @@
                         In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first.
                         </div>
 
-                        <?php  
+                        <?php
                     }
                 }
                 ?>
