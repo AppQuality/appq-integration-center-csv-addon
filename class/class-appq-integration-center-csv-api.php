@@ -151,7 +151,11 @@ class CSVRestApi extends IntegrationCenterRestApi
 			OBJECT
 		);
 
-		$format = $results[0]->endpoint;
+		if ($results) {
+			$format = $results[0]->endpoint;
+		} else {
+			$format = "";
+		}
 
 		return $format;
 	}
