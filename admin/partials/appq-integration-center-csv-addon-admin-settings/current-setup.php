@@ -5,13 +5,11 @@ $project  = isset( json_decode( $campaign->bugtracker->endpoint )->project ) ? j
 ?>
 <div class="row d-flex">
 	<div class="col-1 d-flex-vertical-center">
-        <?php
-        printf(
-            '<img id="integration-logo" src="%s" alt="%s">',
-            APPQ_INTEGRATION_CENTER_CSV_URL . 'admin/assets/img/icon-csv.png',
-            $campaign->bugtracker->integration
-        );
-        ?>
+        <?php if ($campaign->bugtracker->endpoint === "csv_format") :?>
+			<img id="integration-logo" src="<?= APPQ_INTEGRATION_CENTER_CSV_URL . 'admin/assets/img/icon-csv.png'?>">
+        <?php else :?>
+			<img id="integration-logo" src="<?= APPQ_INTEGRATION_CENTER_CSV_URL . 'admin/assets/img/icon-xml.png'?>">
+        <?php endif;?>
 	</div>
 	<div class="col d-flex-vertical-center">
         <?php

@@ -7,19 +7,22 @@ class CSVRestApi extends IntegrationCenterRestApi
 
     function __construct( $cp_id ) {
         $this->_CAMPAIGN_ID = $cp_id;
-        
+
         parent::__construct( $cp_id, "csv_exporter", "Csv Export" );
 
         $basic_configuration = new stdClass;
         foreach ( $this->mappings as $key => $value ) {
             $slug = $value['prop'];
-            $obj = new stdClass;
-            $obj->value = $key;
-            $obj->description = $value['description'];
-            $obj->key = $value['prop'];
-            $obj->selected = 1;
+            if ($value['prop'] !== "media")
+            {
+                $obj = new stdClass;
+                $obj->value = $key;
+                $obj->description = $value['description'];
+                $obj->key = $value['prop'];
+                $obj->selected = 1;
 
-            $basic_configuration->$slug = $obj;
+                $basic_configuration->$slug = $obj;
+            }
         }
 
         $this->basic_configuration = $basic_configuration;
@@ -34,8 +37,8 @@ class CSVRestApi extends IntegrationCenterRestApi
 			);
 
 			$bug_id = intval( $bug_id );
-			
-			if ( 
+
+			if (
 				$bug_id > 0 &&
 				!empty( $this->get_selected_fields() )
 			) {
@@ -56,7 +59,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 				"status" => true,
 				"message" => ""
 			);
-		}		
+		}
 
         return $response;
     }
