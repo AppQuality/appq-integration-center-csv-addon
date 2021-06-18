@@ -103,7 +103,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             $this->integration,
             array(
                 'class' => $this,
-                'visible_to_customer' => true
+                'visible_to_customer' => false
             )
         );
         return $integrations;
@@ -221,22 +221,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                             "endpoint" 		=> $endpoint,
                             "apikey"		=> $apikey,
                             "is_active"		=> 1,
-                            "upload_media"	=> $upload_media
+                            "upload_media"	=> 0
                         ),
                         array(
                             "campaign_id" => $cp_id,
                             "integration" => $this->integration[ "slug" ]
-                        ),
-                        array(
-                            "%s",
-                            "%s",
-                            "%s",
-                            "%d",
-                            "%d"
-                        ),
-                        array(
-                            "%d",
-                            "%s"
                         )
                     );
                 } else { // Insert the Config
@@ -244,13 +233,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         $appq_integration_center_config,
                         array(
                             "campaign_id" => $cp_id,
+                            "endpoint" 		=> $endpoint,
                             "integration" => $this->integration[ "slug" ],
-                            "field_mapping" => $field_keys
-                        ),
-                        array(
-                            "%d",
-                            "%s",
-                            "%s"
+                            "field_mapping" => $field_keys,
+                            "is_active"		=> 1,
+                            "upload_media"	=> 0
                         )
                     );
                 }
@@ -327,7 +314,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         // Fill the Bug Data
                         foreach ( $field_keys as $field_key ) {
                             $data = $CSV_API->bug_data_replace( $bug, $field_key->value );
-                            $csv_data[ $bug_id ][] = !empty( $data ) ? strip_tags($data) : "";
+                            $csv_data[ $bug_id ][] = !empty( $data ) ? str_replace("\r\n","",strip_tags($data)) : "";
                         }
                     }
 
@@ -350,6 +337,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                             fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // Force UTF-8 encode
                             fputcsv( $fp, $titles );
                             foreach ( $csv_data as $bug_data ) {
+                              //  if ($bug_data->)
                                 fputcsv( $fp, $bug_data );
                             }
                             fclose( $fp );
