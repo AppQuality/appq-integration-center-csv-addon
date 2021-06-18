@@ -173,6 +173,9 @@ class Appq_Integration_Center_Csv_Addon {
 		// Define AJAX Call for the CSV Download
 		$this->loader->add_action( "wp_ajax_download_csv_export", $plugin_admin, "download_csv_export" );
 
+		// Define AJAX Call for the Custom Field Mapping
+		$this->loader->add_action( "wp_ajax_new_field_mapping", $plugin_admin, "new_field_mapping" );
+
 		$this->loader->add_filter( 'register_integrations', $plugin_admin, 'register_type', 15 );
 	}
 

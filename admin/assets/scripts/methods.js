@@ -5,53 +5,78 @@ function clickAvailableField() {
 }
 
 function clickSaveCSVExport() {
-    // Check if the button is locked
-    if ( jQuery( this ).hasClass( "locked" ) ) { return false; }
+    if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() == "csv_exporter" ) {
+        // Check if the button is locked
+        if ( ( $submitButton ).hasClass( "locked" ) ) { return false; }
 
-    // Lock the Button
-    jQuery( this ).addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
+        // Lock the Button
+        $submitButton.addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
-    // Collect all of the selected fields
-    let fieldKeys = [];
-    if ( $availableFieldsContainer.find( ".selected" ).length > 0 ) {
-        $availableFieldsContainer.find( ".selected" ).each( function(){
-            fieldKeys.push( jQuery( this ).data( "key" ) );
+        // Get format select value
+        let exportFormat = $availableFormatsSelect.val();
+
+        // Block save if the are not field selected
+        if ($availableFieldsContainer.find(".field.selected").length == 0) {
+            toastr["error"]("Select some fields first!");
+            // Unlock the buton
+            $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
+            return false;
+        }
+
+        // Collect all of the selected fields
+        let fieldKeys = {};
+        $availableFieldsContainer.find( ".field" ).each( function() {
+            let data = {};
+            data['value'] = jQuery( this ).data( "value" );
+            data['description'] = jQuery( this ).data( "description" );
+            data['key'] = jQuery( this ).data( "key" );
+            if (jQuery( this ).hasClass('selected')) {
+                data['selected'] = 1;
+            } else {
+                data['selected'] = 0;
+            }
+            fieldKeys[jQuery( this ).data( "key" )] = data;
+        } );
+
+        let jsonFieldKeys = JSON.stringify(fieldKeys);
+
+        // Perform an AJAX Call
+        jQuery.ajax( {
+            url: custom_object.ajax_url,
+            type: "POST",
+            data: {
+                action: "save_csv_export",
+                cp_id: cp_id,
+                field_keys: jsonFieldKeys,
+                csv_endpoint: exportFormat
+            },
+            success: function( response ) {
+                // Unlock the buton
+                $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
+
+                // Parse Result
+                if ( typeof response !== "undefined" ) {
+                    let result = JSON.parse( response );
+
+                    if ( result.messages.length > 0 ) {
+                        for ( let key in result.messages ) {
+                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                        }
+                    }
+
+                    location.reload();
+                }
+            },
+            error: function( response ) {
+                console.log( response );
+            }
         } );
     }
-
-    // Perform an AJAX Call
-    jQuery.ajax( {
-        url: ajaxurl,
-        type: "POST",
-        data: {
-            action: "save_csv_export",
-            cp_id: cp_id,
-            field_keys: fieldKeys
-        },
-        success: function( response ) {
-            // Unlock the buton
-            jQuery( $saveCSVExport ).removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
-
-            // Parse Result
-            if ( typeof response !== "undefined" ) {
-                let result = JSON.parse( response );
-
-                if ( result.messages.length > 0 ) {
-                    for ( let key in result.messages ) {
-                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
-                    }
-                }
-            }
-        },
-        error: function( response ) {
-            console.log( response );
-        }
-    } );
 }
 
 function clickSend( event ) {
     // Check if the Bug Tracker is set to CSV Exporter
-    if ( jQuery( "#general_settings [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
+    if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
 
     // Get the Bug ID
     let bugID = jQuery( this ).data( "bug-id" );
@@ -71,15 +96,22 @@ function saveCSVExport() {
         // Reset the Setup
         sendClicked = false;
         clearInterval( bugCollectorInterval );
-        
+
         // Invoke the CSV Download
         jQuery.ajax( {
-            url: ajaxurl,
+            url: custom_object.ajax_url,
             type: "POST",
+            headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
                 action: "download_csv_export",
                 cp_id: cp_id,
                 bug_ids: bugIDs
+            },
+            beforeSend: function() {
+                if (!enableBugUpload) {
+                    // Reset exported check flag
+                    jQuery('#bugs_list .is_uploaded .fa-check').remove();
+                }
             },
             success: function( response ) {
                 // Parse Result
@@ -93,12 +125,42 @@ function saveCSVExport() {
                         }
                     }
 
+                    console.log(result)
+
                     // Invoke the Download upon success
-                    if ( result.success ) { window.open( result.download_url ); }
+                    if ( result.success ) { 
+                        // window.open( result.download_url ); 
+                        let link = document.createElement("a");
+                        if (result.format == "csv_format") {
+                            link.download = "export.csv";
+                        } else if (result.format == "xml_format") {
+                            link.download = "export.xml";
+                        }
+                        link.href = result.download_url;
+                        document.body.appendChild(link);
+                        link.click();
+                        setTimeout(function() {
+                            document.body.removeChild(link);
+                        }, 50);
+
+                        if (!enableBugUpload) {
+                            // Reset selected bug for export
+                            jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                            jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                            jQuery('#bugs_list .check:checked').prop('checked', false);
+                        }
+                    }
                 }
             },
             error: function( response ) {
                 console.log( response );
+
+                if (!enableBugUpload) {
+                    // Reset selected bug for export
+                    jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                    jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                    jQuery('#bugs_list .check:checked').prop('checked', false);
+                }
             }
         } );
 
@@ -108,4 +170,45 @@ function saveCSVExport() {
     } else { // Equalize the inspectionIDs with the bugIDs and proceed with the syncing
         inspectionIDs = bugIDs;
     }
+}
+
+function newFieldMapping() {
+    let key = jQuery('#add_mapping_field_modal #mapping_modal_key').val();
+    let value = jQuery('#custom_mapping_name').val();
+
+    if (!key || !value) { return; }
+
+    // Invoke the CSV Download
+    jQuery.ajax( {
+        url: custom_object.ajax_url,
+        type: "POST",
+        data: {
+            action: "new_field_mapping",
+            cp_id: cp_id,
+            key: key,
+            value: value
+        },
+        success: function( response ) {
+            // Parse Result
+            if ( typeof response !== "undefined" ) {
+                let result = JSON.parse( response );
+
+                // Present Messages
+                if ( result.messages.length > 0 ) {
+                    for ( let key in result.messages ) {
+                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    }
+                }
+
+                location.reload();
+            }
+        },
+        error: function( response ) {
+            console.log( response );
+        }
+    } );
+}
+
+function editModalHandler() {
+    jQuery('#add_mapping_field_modal #mapping_modal_key').val(jQuery(this).data('key'));
 }

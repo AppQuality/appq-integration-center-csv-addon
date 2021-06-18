@@ -22,7 +22,7 @@ class CsvInspector
 		$cp_id = intval( $cp_id );
 		
 		// If the CP ID is not provided collect it from the original init
-		if ( $cp_id == 0 ) { $cp_id = self::_CAMPAIGN_ID; }
+		if ( $cp_id == 0 ) { $cp_id = self::$_CAMPAIGN_ID; }
 
 		// Init Table
 		global $wpdb;
