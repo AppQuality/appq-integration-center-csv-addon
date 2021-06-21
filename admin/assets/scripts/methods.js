@@ -125,11 +125,8 @@ function saveCSVExport() {
                         }
                     }
 
-                    console.log(result)
-
                     // Invoke the Download upon success
-                    if ( result.success ) { 
-                        // window.open( result.download_url ); 
+                    if ( result.success ) {
                         let link = document.createElement("a");
                         if (result.format == "csv_format") {
                             link.download = "export.csv";
@@ -149,6 +146,9 @@ function saveCSVExport() {
                             jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
                             jQuery('#bugs_list .check:checked').prop('checked', false);
                         }
+
+                        // Delete file from server
+                        deleteCSVExport(result.file_url);
                     }
                 }
             },
@@ -211,4 +211,31 @@ function newFieldMapping() {
 
 function editModalHandler() {
     jQuery('#add_mapping_field_modal #mapping_modal_key').val(jQuery(this).data('key'));
+}
+
+function deleteCSVExport(file_url) {
+    jQuery.ajax( {
+        url: custom_object.ajax_url,
+        type: "POST",
+        data: {
+            action: "delete_export",
+            file_url: file_url
+        },
+        success: function( response ) {
+            // Parse Result
+            if ( typeof response !== "undefined" ) {
+                let result = JSON.parse( response );
+
+                // Present Messages
+                if ( result.messages.length > 0 ) {
+                    for ( let key in result.messages ) {
+                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    }
+                }
+            }
+        },
+        error: function( response ) {
+            console.log( response );
+        }
+    });
 }
