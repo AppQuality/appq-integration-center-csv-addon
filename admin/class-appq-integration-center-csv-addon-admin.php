@@ -191,17 +191,13 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
         // Clean json encoding slashes
         $field_keys = str_replace("\\", "", $field_keys);
-
-        $result = new stdClass;
-        $result->success = false;
-        $result->messages = array();
-
+        
         if ( !empty( $cp_id ) ) {
             $is_valid_request = true;
 
             if ( empty( $field_keys ) ) {
-                $result->messages[] = array( "type" => "error", "message" => "Choose some Fields first." );
                 $is_valid_request = false;
+                wp_send_json_error(array( "type" => "error", "message" => "Choose some fields first" ));
             }
 
             if ( $is_valid_request ) {
@@ -243,22 +239,21 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     );
                 }
 
+                // Deactivate all other integrations
                 $sql = 'UPDATE '.$wpdb->prefix .'appq_integration_center_config
 	            SET is_active = 0
 	            WHERE campaign_id = %d AND integration != "csv_exporter";';
                 $sql = $wpdb->prepare($sql,$cp_id);
-
-                $wpdb->query($sql);
-                // Init Result
-                $result->success = true;
-                $result->messages[] = array( "type" => "success", "message" => "Tracker settings updated!" );
+                $res = $wpdb->query($sql);
+                if ($res === false) {
+                    wp_send_json_error();
+                }
+                
+                wp_send_json_success(array( "type" => "success", "message" => "Tracker settings updated!" ));
             }
         } else {
-            $result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID.");
+            wp_send_json_error(array( "type" => "error", "message" => "Choose a campaign ID" ));
         }
-
-        echo json_encode( $result );
-        die( "" );
     }
 
     /**
@@ -273,21 +268,17 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         $cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
         $bug_ids = isset( $_POST[ "bug_ids" ] ) && !empty( $_POST[ "bug_ids" ] ) ? CsvInspector::sanitize_array_of_ints( $_POST[ "bug_ids" ] ) : false;
 
-        $result = new stdClass;
-        $result->success = false;
-        $result->messages = array();
-
         if ( !empty( $cp_id ) ) {
             $is_valid_request = true;
 
             if ( !CsvInspector::has_bugs( $cp_id ) ) {
-                $result->messages[] = array( "type" => "warning", "message" => "Choose some a Campaign with Bugs." );
                 $is_valid_request = false;
+                wp_send_json_error(array( "type" => "warning", "message" => "Choose some a campaign with bugs" ));
             }
 
             if ( empty( $bug_ids ) ) {
-                $result->messages[] = array( "type" => "error", "message" => "Choose some Bugs first." );
                 $is_valid_request = false;
+                wp_send_json_error(array( "type" => "error", "message" => "Choose some bugs first" ));
             }
 
             if ( $is_valid_request ) {
@@ -298,8 +289,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
                 // Check if the Fields were already stored
                 if ( empty( $field_keys ) ) {
-                    $result->messages[] = array( "type" => "error", "message" => "Choose some Fields first." );
                     $is_valid_request = false;
+                    wp_send_json_error(array( "type" => "error", "message" => "Choose some fields first" ));
                 }
 
                 if ( $is_valid_request ) {
@@ -387,21 +378,19 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         }
                     }
 
-                    // Init Result
-                    $result->success = true;
-                    $result->download_url = $download_url;
-                    $result->file_name = $file_name;
-                    $result->file_url = $file_url;
-                    $result->format = $file_format;
-                    $result->messages[] = array( "type" => "success", "message" => "Your export will be downloaded soon!" );
+                    wp_send_json_success(array(
+                        "type"          => "success",
+                        "download_url"  => $download_url,
+                        "file_name"     => $file_name,
+                        "file_url"      => $file_url,
+                        "format"        => $file_format,
+                        "message"       => "Your export will be downloaded soon!"
+                    ));
                 }
             }
         } else {
-            $result->messages[] = array( "type" => "error", "message" => "Choose a Campaign ID." );
+            wp_send_json_error(array( "type" => "error", "message" => "Choose a campaign ID" ));
         }
-
-        echo json_encode( $result );
-        die( "" );
     }
 
     public function new_field_mapping() {
@@ -409,16 +398,12 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         $key = isset( $_POST[ "key" ] ) && !empty( $_POST[ "key" ] ) ? $_POST[ "key" ] : "";
         $value = isset( $_POST[ "value" ] ) && !empty( $_POST[ "value" ] ) ? $_POST[ "value" ] : "";
 
-        $result = new stdClass;
-        $result->success = false;
-        $result->messages = array();
-
         if (empty($cp_id)) {
-            $result->messages[] = array( "type" => "error", "message" => "Missing Campaign ID." );
+            wp_send_json_error(array( "type" => "error", "message" => "Missing campaign ID" ));
         } else if (empty($key)) {
-            $result->messages[] = array( "type" => "error", "message" => "Missing Field to update." );
+            wp_send_json_error(array( "type" => "error", "message" => "Missing field to update" ));
         } else if (empty($value)) {
-            $result->messages[] = array( "type" => "error", "message" => "Missing Value for field to update." );
+            wp_send_json_error(array( "type" => "error", "message" => "Missing value for field to update" ));
         } else {
             global $wpdb;
             $appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
@@ -430,7 +415,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             );
 
             if (empty($results_)) {
-                $result->messages[] = array( "type" => "error", "message" => "Set tracker settings first." );
+                wp_send_json_error(array( "type" => "error", "message" => "Set tracker settings first" ));
             } else { // Update the field mapping
                 $field_mapping = json_decode($results_[0]->field_mapping);
                 foreach ($field_mapping as $field_key => $field_value) {
@@ -458,21 +443,16 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         "%s"
                     )
                 );
-
-                // Init Result
-                $result->success = true;
-                $result->messages[] = array( "type" => "success", "message" => "Your fields are saved successfully!" );
+                
+                wp_send_json_success(array( "type" => "success", "message" => "Your fields are saved successfully!" ));
             }
         }
-
-        echo json_encode($result);
-        die("");
     }
 
     public function delete_export()
     {
         if (!check_ajax_referer('appq-ajax-nonce', 'nonce', false)) {
-            wp_send_json_error('You don\'t have the permission to do this');
+            wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
         }
 
         $file_url = array_key_exists('file_url', $_POST) ? $_POST['file_url'] : '';
@@ -480,35 +460,24 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         $file_ext = end(explode(".", $file_name));
 
         if (strpos($file_url, '/tmp/') === false) {
-            wp_send_json_error('You don\'t have the permission to do this');
+            wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
         }
 
         if ($file_ext !== "csv" && $file_ext !== "xml") {
-            wp_send_json_error('You don\'t have the permission to do this');
+            wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
         }
 
-        // Init result message
-        $result = new stdClass;
-        $result->success = false;
-        $result->messages = array();
-    
         if ($file_url) {
             if (file_exists($file_url)) {
                 // Delete file
                 unlink($file_url);
                 
-                // Set valid result
-                $result->success = true;
-                $result->file_url = $file_url;
-                $result->messages[] = array( "type" => "success", "message" => "The file has been deleted." );
+                wp_send_json_success();
             } else {
-                $result->messages[] = array( "type" => "error", "message" => "File not found." );
+                wp_send_json_error(array( "type" => "error", "message" => "File not found" ));
             }
         } else {
-            $result->messages[] = array( "type" => "error", "message" => "File path not valid." );
+            wp_send_json_error(array( "type" => "error", "message" => "File path not valid" ));
         }
-    
-        echo json_encode( $result );
-        die( "" );
     }
 }

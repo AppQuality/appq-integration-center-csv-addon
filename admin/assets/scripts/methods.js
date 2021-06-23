@@ -56,11 +56,11 @@ function clickSaveCSVExport() {
 
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = JSON.parse( response );
+                    let result = response;
 
-                    if ( result.messages.length > 0 ) {
-                        for ( let key in result.messages ) {
-                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    if (result.data) {
+                        if (result.data.message) {
+                            toastr[ result.data.type ]( result.data.message );
                         }
                     }
 
@@ -116,24 +116,23 @@ function saveCSVExport() {
             success: function( response ) {
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = JSON.parse( response );
+                    let result = response;
 
-                    // Present Messages
-                    if ( result.messages.length > 0 ) {
-                        for ( let key in result.messages ) {
-                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    if (result.data) {
+                        if (result.data.message) {
+                            toastr[ result.data.type ]( result.data.message );
                         }
                     }
 
                     // Invoke the Download upon success
                     if ( result.success ) {
                         let link = document.createElement("a");
-                        if (result.format == "csv_format") {
+                        if (result.data.format == "csv_format") {
                             link.download = "export.csv";
-                        } else if (result.format == "xml_format") {
+                        } else if (result.data.format == "xml_format") {
                             link.download = "export.xml";
                         }
-                        link.href = result.download_url;
+                        link.href = result.data.download_url;
                         document.body.appendChild(link);
                         link.click();
                         setTimeout(function() {
@@ -148,7 +147,7 @@ function saveCSVExport() {
                         }
 
                         // Delete file from server
-                        deleteCSVExport(result);
+                        deleteCSVExport(result.data);
                     }
                 }
             },
@@ -191,12 +190,11 @@ function newFieldMapping() {
         success: function( response ) {
             // Parse Result
             if ( typeof response !== "undefined" ) {
-                let result = JSON.parse( response );
+                let result = response;
 
-                // Present Messages
-                if ( result.messages.length > 0 ) {
-                    for ( let key in result.messages ) {
-                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                if (result.data) {
+                    if (result.data.message) {
+                        toastr[ result.data.type ]( result.data.message );
                     }
                 }
 
@@ -226,12 +224,11 @@ function deleteCSVExport(data) {
         success: function( response ) {
             // Parse Result
             if ( typeof response !== "undefined" ) {
-                let result = JSON.parse( response );
+                let result = response;
 
-                // Present Messages
-                if ( result.messages.length > 0 ) {
-                    for ( let key in result.messages ) {
-                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                if (result.data) {
+                    if (result.data.message) {
+                        toastr[ result.data.type ]( result.data.message );
                     }
                 }
             }
