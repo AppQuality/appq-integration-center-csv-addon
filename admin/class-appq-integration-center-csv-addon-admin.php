@@ -84,10 +84,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
     public function enqueue_scripts($hook)
     {
         if (strpos($hook, 'integration-center') !== false) {
-            wp_enqueue_script($this->plugin_name . '-methods', plugin_dir_url(__FILE__) . 'assets/scripts/methods.js', array('jquery'), $this->version);
-            wp_enqueue_script($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . 'assets/scripts/admin.js', array('jquery'), $this->version);
-            wp_localize_script($this->plugin_name, 'custom_object', array(
-                'ajax_url' => admin_url('admin-ajax.php')
+            wp_enqueue_script($this->plugin_name . "-methods", plugin_dir_url(__FILE__) . 'assets/scripts/methods.js', array('jquery'), $this->version);
+            wp_enqueue_script($this->plugin_name . "-admin", plugin_dir_url(__FILE__) . 'assets/scripts/admin.js', array('jquery'), $this->version);
+            wp_localize_script($this->plugin_name . "-methods", 'ajax_object', array(
+                'ajax_url'  => admin_url('admin-ajax.php'),
+                'nonce'     => wp_create_nonce('appq-ajax-nonce')
             ));
         }
     }
@@ -327,9 +328,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
                     // File settings
                     $current_time = gmdate('Ymdhis', time());
-                    $file_folder = $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/appq-integration-center-csv-addon/admin/files/";
-                    chmod($file_folder, 0777);
-                    $export_path = APPQ_INTEGRATION_CENTER_CSV_URL . "/admin/files/";
+                    $file_folder = ABSPATH . "wp-content/plugins/appq-integration-center-csv-addon/tmp/";
+                    $export_path = APPQ_INTEGRATION_CENTER_CSV_URL . "/tmp/";
 
                     // Check file format
                     $file_format = $CSV_API->get_format($cp_id);
@@ -390,7 +390,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     // Init Result
                     $result->success = true;
                     $result->download_url = $download_url;
-                    $result->filename = $file_name;
+                    $result->file_name = $file_name;
                     $result->file_url = $file_url;
                     $result->format = $file_format;
                     $result->messages[] = array( "type" => "success", "message" => "Your export will be downloaded soon!" );
@@ -471,7 +471,21 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
     public function delete_export()
     {
+        if (!check_ajax_referer('appq-ajax-nonce', 'nonce', false)) {
+            wp_send_json_error('You don\'t have the permission to do this');
+        }
+
         $file_url = array_key_exists('file_url', $_POST) ? $_POST['file_url'] : '';
+        $file_name = array_key_exists('file_name', $_POST) ? $_POST['file_name'] : '';
+        $file_ext = end(explode(".", $file_name));
+
+        if (strpos($file_url, '/tmp/') === false) {
+            wp_send_json_error('You don\'t have the permission to do this');
+        }
+
+        if ($file_ext !== "csv" && $file_ext !== "xml") {
+            wp_send_json_error('You don\'t have the permission to do this');
+        }
 
         // Init result message
         $result = new stdClass;

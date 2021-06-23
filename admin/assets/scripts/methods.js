@@ -42,7 +42,7 @@ function clickSaveCSVExport() {
 
         // Perform an AJAX Call
         jQuery.ajax( {
-            url: custom_object.ajax_url,
+            url: ajax_object.ajax_url,
             type: "POST",
             data: {
                 action: "save_csv_export",
@@ -99,7 +99,7 @@ function saveCSVExport() {
 
         // Invoke the CSV Download
         jQuery.ajax( {
-            url: custom_object.ajax_url,
+            url: ajax_object.ajax_url,
             type: "POST",
             headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
@@ -148,7 +148,7 @@ function saveCSVExport() {
                         }
 
                         // Delete file from server
-                        deleteCSVExport(result.file_url);
+                        deleteCSVExport(result);
                     }
                 }
             },
@@ -180,7 +180,7 @@ function newFieldMapping() {
 
     // Invoke the CSV Download
     jQuery.ajax( {
-        url: custom_object.ajax_url,
+        url: ajax_object.ajax_url,
         type: "POST",
         data: {
             action: "new_field_mapping",
@@ -213,13 +213,15 @@ function editModalHandler() {
     jQuery('#add_mapping_field_modal #mapping_modal_key').val(jQuery(this).data('key'));
 }
 
-function deleteCSVExport(file_url) {
+function deleteCSVExport(data) {
     jQuery.ajax( {
-        url: custom_object.ajax_url,
+        url: ajax_object.ajax_url,
         type: "POST",
         data: {
             action: "delete_export",
-            file_url: file_url
+            nonce: ajax_object.nonce,
+            file_url: data.file_url,
+            file_name: data.file_name
         },
         success: function( response ) {
             // Parse Result

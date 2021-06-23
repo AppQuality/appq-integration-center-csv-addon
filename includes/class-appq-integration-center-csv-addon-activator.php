@@ -41,8 +41,10 @@ class Appq_Integration_Center_Csv_Addon_Activator {
 			$error[] = "Integration Center main plugin is not active";
 		}
 		
-		
-		
+		$tmp_folder = ABSPATH . 'wp-content/plugins/appq-integration-center-csv-addon/tmp/';
+		if (!file_exists($tmp_folder)) {
+		    mkdir($tmp_folder, 0777, true);
+		}
 		
 		if ($error) 
 		{
