@@ -88,7 +88,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             wp_enqueue_script($this->plugin_name . "-admin", plugin_dir_url(__FILE__) . 'assets/scripts/admin.js', array('jquery'), $this->version);
             wp_localize_script($this->plugin_name . "-methods", 'ajax_object', array(
                 'ajax_url'  => admin_url('admin-ajax.php'),
-                'nonce'     => wp_create_nonce('appq-ajax-nonce')
+                'nonce'     => wp_create_nonce('appq-integration-center-csv-ajax-nonce')
             ));
         }
     }
@@ -451,33 +451,30 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
     public function delete_export()
     {
-        if (!check_ajax_referer('appq-ajax-nonce', 'nonce', false)) {
+        if (!check_ajax_referer('appq-integration-center-csv-ajax-nonce', 'nonce', false)) {
             wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
         }
 
-        $file_url = array_key_exists('file_url', $_POST) ? $_POST['file_url'] : '';
         $file_name = array_key_exists('file_name', $_POST) ? $_POST['file_name'] : '';
         $file_ext = end(explode(".", $file_name));
 
-        if (strpos($file_url, '/tmp/') === false) {
-            wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
+        if ($file_name === "") {
+            wp_send_json_error(array( "type" => "error", "message" => 'Missing file name' ));
         }
 
         if ($file_ext !== "csv" && $file_ext !== "xml") {
-            wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));
+            wp_send_json_error(array( "type" => "error", "message" => 'Wrong file extension' ));
         }
 
-        if ($file_url) {
-            if (file_exists($file_url)) {
-                // Delete file
-                unlink($file_url);
-                
-                wp_send_json_success();
-            } else {
-                wp_send_json_error(array( "type" => "error", "message" => "File not found" ));
-            }
+        $file_url = ABSPATH . "wp-content/plugins/appq-integration-center-csv-addon/tmp/$file_name";
+
+        if (file_exists($file_url)) {
+            // Delete file
+            unlink($file_url);
+            
+            wp_send_json_success();
         } else {
-            wp_send_json_error(array( "type" => "error", "message" => "File path not valid" ));
+            wp_send_json_error(array( "type" => "error", "message" => "File not found" ));
         }
     }
 }

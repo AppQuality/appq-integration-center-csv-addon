@@ -218,7 +218,6 @@ function deleteCSVExport(data) {
         data: {
             action: "delete_export",
             nonce: ajax_object.nonce,
-            file_url: data.file_url,
             file_name: data.file_name
         },
         success: function( response ) {
