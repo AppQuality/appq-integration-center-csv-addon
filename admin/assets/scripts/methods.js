@@ -69,6 +69,9 @@ function clickSaveCSVExport() {
             },
             error: function( response ) {
                 console.log( response );
+
+                // Unlock the buton
+                $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
             }
         } );
     }
@@ -139,15 +142,15 @@ function saveCSVExport() {
                             document.body.removeChild(link);
                         }, 50);
 
-                        if (!enableBugUpload) {
-                            // Reset selected bug for export
-                            jQuery('#bugs_list .upload_bug').removeClass('disabled');
-                            jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
-                            jQuery('#bugs_list .check:checked').prop('checked', false);
-                        }
-
                         // Delete file from server
                         deleteCSVExport(result.data);
+                    }
+
+                    if (!enableBugUpload) {
+                        // Reset selected bug for export
+                        jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                        jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                        jQuery('#bugs_list .check:checked').prop('checked', false);
                     }
                 }
             },

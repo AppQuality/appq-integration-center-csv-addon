@@ -320,56 +320,69 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     // File settings
                     $current_time = gmdate('Ymdhis', time());
                     $file_folder = ABSPATH . "wp-content/plugins/appq-integration-center-csv-addon/tmp/";
-                    $export_path = APPQ_INTEGRATION_CENTER_CSV_URL . "/tmp/";
+                    $export_path = APPQ_INTEGRATION_CENTER_CSV_URL . "tmp/";
 
-                    // Check file format
-                    $file_format = $CSV_API->get_format($cp_id);
-                    switch($file_format) {
-                        case "csv_format":
-                            $file_name = "export_$current_time.csv";
-                            $file_url = $file_folder . $file_name;
-                            $download_url = $export_path . $file_name;
+                    try {
+                        // Check file format
+                        $file_format = $CSV_API->get_format($cp_id);
+                        switch($file_format) {
+                            case "csv_format":
+                                $file_name = "export_$current_time.csv";
+                                $file_url = $file_folder . $file_name;
+                                $download_url = $export_path . $file_name;
 
-                            // Generate the CSV file
-                            $fp = fopen( $file_url, 'w' );
-                            fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // Force UTF-8 encode
-                            fputcsv( $fp, $titles );
-                            foreach ( $csv_data as $bug_data ) {
-                                fputcsv( $fp, $bug_data );
-                            }
-                            fclose( $fp );
+                                // Generate the CSV file
+                                $fp = fopen( $file_url, 'w' );
 
-                            break;
-                        case "xml_format":
-                            $file_name = "export_$current_time.xml";
-                            $file_url = $file_folder . $file_name;
-                            $download_url = $export_path . $file_name;
-
-                            // Generate XML file
-                            $xml = new SimpleXMLElement('<xml/>');
-                            foreach ($csv_data as $bug_id => $field_value) {
-                                $bug = $xml->addChild('bug');
-                                $bug->addAttribute('id', $bug_id);
-                                foreach ($field_value as $index => $value) {
-                                    $field = $bug->addChild('field');
-                                    $field->addChild('name', $titles[$index]);
-                                    $field->addChild('value', $value);
+                                if (!$fp) {
+                                    wp_send_json_error(array( "type" => "error", "message" => "Error: " . error_get_last()['message'] ));
+                                    break;
                                 }
-                            }
 
-                            // Save XML file
-                            $dom = new DOMDocument('1,0');
-                            $dom->preserveWhiteSpace = false;
-                            $dom->formatOutput = true;
-                            $dom->loadXML($xml->asXML());
-                            $dom->saveXML();
-                            $dom->save($file_url);
+                                fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // Force UTF-8 encode
+                                fputcsv( $fp, $titles );
+                                foreach ( $csv_data as $bug_data ) {
+                                    fputcsv( $fp, $bug_data );
+                                }
+                                fclose( $fp );
 
-                            break;
+                                break;
+                            case "xml_format":
+                                $file_name = "export_$current_time.xml";
+                                $file_url = $file_folder . $file_name;
+                                $download_url = $export_path . $file_name;
+
+                                // Generate XML file
+                                $xml = new SimpleXMLElement('<xml/>');
+                                foreach ($csv_data as $bug_id => $field_value) {
+                                    $bug = $xml->addChild('bug');
+                                    $bug->addAttribute('id', $bug_id);
+                                    foreach ($field_value as $index => $value) {
+                                        $field = $bug->addChild('field');
+                                        $field->addChild('name', $titles[$index]);
+                                        $field->addChild('value', $value);
+                                    }
+                                }
+
+                                // Save XML file
+                                $dom = new DOMDocument('1,0');
+                                $dom->preserveWhiteSpace = false;
+                                $dom->formatOutput = true;
+                                $dom->loadXML($xml->asXML());
+                                $dom->saveXML();
+                                $status = $dom->save($file_url);
+
+                                if (!$status) {
+                                    wp_send_json_error(array( "type" => "error", "message" => "Error: " . error_get_last()['message'] ));
+                                }
+
+                                break;
+                        }
+                    } catch(Exception $e) {
+                        wp_send_json_error(array( "type" => "error", "message" => $e->getMessage() ));
                     }
 
                     // Wait for file write to exist
-                    set_time_limit(0);
                     $not_created = true;
                     while ($not_created) {
                         if (file_exists($file_url)) {
