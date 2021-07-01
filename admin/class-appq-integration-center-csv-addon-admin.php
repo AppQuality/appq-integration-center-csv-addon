@@ -102,8 +102,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         $integrations[] = array_merge(
             $this->integration,
             array(
-                'class' => $this,
-                'visible_to_customer' => false
+                'class' => $this
             )
         );
         return $integrations;
