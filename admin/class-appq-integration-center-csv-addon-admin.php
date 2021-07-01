@@ -318,7 +318,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     }
 
                     // File settings
-                    $current_time = gmdate('Ymdhis', time());
+                    $now = time() + 60 * 60 * 2;
+                    $current_time = gmdate('Ymdhis', $now);
                     $file_folder = ABSPATH . "wp-content/plugins/appq-integration-center-csv-addon/tmp/";
                     $export_path = APPQ_INTEGRATION_CENTER_CSV_URL . "tmp/";
 
@@ -327,7 +328,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         $file_format = $CSV_API->get_format($cp_id);
                         switch($file_format) {
                             case "csv_format":
-                                $file_name = "export_$current_time.csv";
+                                $file_name = "export_" . $cp_id . "_" . $current_time . ".csv";
                                 $file_url = $file_folder . $file_name;
                                 $download_url = $export_path . $file_name;
 
@@ -348,7 +349,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
                                 break;
                             case "xml_format":
-                                $file_name = "export_$current_time.xml";
+                                $file_name = "export_" . $cp_id . "_" . $current_time . ".xml";
                                 $file_url = $file_folder . $file_name;
                                 $download_url = $export_path . $file_name;
 

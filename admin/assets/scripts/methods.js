@@ -130,11 +130,7 @@ function saveCSVExport() {
                     // Invoke the Download upon success
                     if ( result.success ) {
                         let link = document.createElement("a");
-                        if (result.data.format == "csv_format") {
-                            link.download = "export.csv";
-                        } else if (result.data.format == "xml_format") {
-                            link.download = "export.xml";
-                        }
+                        link.download = result.data.file_name;
                         link.href = result.data.download_url;
                         document.body.appendChild(link);
                         link.click();
