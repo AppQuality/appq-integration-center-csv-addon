@@ -42,7 +42,7 @@ function clickSaveCSVExport() {
 
         // Perform an AJAX Call
         jQuery.ajax( {
-            url: custom_object.ajax_url,
+            url: ajax_object.ajax_url,
             type: "POST",
             data: {
                 action: "save_csv_export",
@@ -56,11 +56,11 @@ function clickSaveCSVExport() {
 
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = JSON.parse( response );
+                    let result = response;
 
-                    if ( result.messages.length > 0 ) {
-                        for ( let key in result.messages ) {
-                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    if (result.data) {
+                        if (result.data.message) {
+                            toastr[ result.data.type ]( result.data.message );
                         }
                     }
 
@@ -69,6 +69,9 @@ function clickSaveCSVExport() {
             },
             error: function( response ) {
                 console.log( response );
+
+                // Unlock the buton
+                $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
             }
         } );
     }
@@ -99,7 +102,7 @@ function saveCSVExport() {
 
         // Invoke the CSV Download
         jQuery.ajax( {
-            url: custom_object.ajax_url,
+            url: ajax_object.ajax_url,
             type: "POST",
             headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
@@ -116,39 +119,34 @@ function saveCSVExport() {
             success: function( response ) {
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = JSON.parse( response );
+                    let result = response;
 
-                    // Present Messages
-                    if ( result.messages.length > 0 ) {
-                        for ( let key in result.messages ) {
-                            toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                    if (result.data) {
+                        if (result.data.message) {
+                            toastr[ result.data.type ]( result.data.message );
                         }
                     }
 
-                    console.log(result)
-
                     // Invoke the Download upon success
-                    if ( result.success ) { 
-                        // window.open( result.download_url ); 
+                    if ( result.success ) {
                         let link = document.createElement("a");
-                        if (result.format == "csv_format") {
-                            link.download = "export.csv";
-                        } else if (result.format == "xml_format") {
-                            link.download = "export.xml";
-                        }
-                        link.href = result.download_url;
+                        link.download = result.data.file_name;
+                        link.href = result.data.download_url;
                         document.body.appendChild(link);
                         link.click();
                         setTimeout(function() {
                             document.body.removeChild(link);
                         }, 50);
 
-                        if (!enableBugUpload) {
-                            // Reset selected bug for export
-                            jQuery('#bugs_list .upload_bug').removeClass('disabled');
-                            jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
-                            jQuery('#bugs_list .check:checked').prop('checked', false);
-                        }
+                        // Delete file from server
+                        deleteCSVExport(result.data);
+                    }
+
+                    if (!enableBugUpload) {
+                        // Reset selected bug for export
+                        jQuery('#bugs_list .upload_bug').removeClass('disabled');
+                        jQuery('#bugs_list .upload_bug').removeClass('text-secondary');
+                        jQuery('#bugs_list .check:checked').prop('checked', false);
                     }
                 }
             },
@@ -180,7 +178,7 @@ function newFieldMapping() {
 
     // Invoke the CSV Download
     jQuery.ajax( {
-        url: custom_object.ajax_url,
+        url: ajax_object.ajax_url,
         type: "POST",
         data: {
             action: "new_field_mapping",
@@ -191,12 +189,11 @@ function newFieldMapping() {
         success: function( response ) {
             // Parse Result
             if ( typeof response !== "undefined" ) {
-                let result = JSON.parse( response );
+                let result = response;
 
-                // Present Messages
-                if ( result.messages.length > 0 ) {
-                    for ( let key in result.messages ) {
-                        toastr[ result.messages[ key ].type ]( result.messages[ key ].message );
+                if (result.data) {
+                    if (result.data.message) {
+                        toastr[ result.data.type ]( result.data.message );
                     }
                 }
 
@@ -211,4 +208,31 @@ function newFieldMapping() {
 
 function editModalHandler() {
     jQuery('#add_mapping_field_modal #mapping_modal_key').val(jQuery(this).data('key'));
+}
+
+function deleteCSVExport(data) {
+    jQuery.ajax( {
+        url: ajax_object.ajax_url,
+        type: "POST",
+        data: {
+            action: "appq_delete_csv_export",
+            nonce: ajax_object.nonce,
+            file_name: data.file_name
+        },
+        success: function( response ) {
+            // Parse Result
+            if ( typeof response !== "undefined" ) {
+                let result = response;
+
+                if (result.data) {
+                    if (result.data.message) {
+                        toastr[ result.data.type ]( result.data.message );
+                    }
+                }
+            }
+        },
+        error: function( response ) {
+            console.log( response );
+        }
+    });
 }
