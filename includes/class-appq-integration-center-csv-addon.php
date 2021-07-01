@@ -177,7 +177,7 @@ class Appq_Integration_Center_Csv_Addon {
 		$this->loader->add_action( "wp_ajax_new_field_mapping", $plugin_admin, "new_field_mapping" );
 
 		// Define call to delete old exported files
-		$this->loader->add_action( "wp_ajax_delete_export", $plugin_admin, "delete_export" );
+		$this->loader->add_action( "wp_ajax_appq_delete_csv_export", $plugin_admin, "delete_export" );
 
 		$this->loader->add_filter( 'register_integrations', $plugin_admin, 'register_type', 15 );
 	}

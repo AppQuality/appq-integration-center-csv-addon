@@ -43,7 +43,7 @@ class Appq_Integration_Center_Csv_Addon_Activator {
 		
 		$tmp_folder = ABSPATH . 'wp-content/plugins/appq-integration-center-csv-addon/tmp/';
 		if (!file_exists($tmp_folder)) {
-		    mkdir($tmp_folder, 0777, true);
+		    mkdir($tmp_folder, 0755, true);
 		}
 		
 		if ($error) 

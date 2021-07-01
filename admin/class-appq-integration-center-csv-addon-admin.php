@@ -463,7 +463,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         }
     }
 
-    public function delete_export()
+    public function appq_delete_csv_export()
     {
         if (!check_ajax_referer('appq-integration-center-csv-ajax-nonce', 'nonce', false)) {
             wp_send_json_error(array( "type" => "error", "message" => 'You don\'t have the permission to do this' ));

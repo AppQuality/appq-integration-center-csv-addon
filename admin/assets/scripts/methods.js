@@ -215,7 +215,7 @@ function deleteCSVExport(data) {
         url: ajax_object.ajax_url,
         type: "POST",
         data: {
-            action: "delete_export",
+            action: "appq_delete_csv_export",
             nonce: ajax_object.nonce,
             file_name: data.file_name
         },
