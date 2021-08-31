@@ -26,8 +26,8 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
 ?>
 
 <div class="row mt-5">
-    <label class="mb-3">Select file format</label>
-    <select id="available-formats" name="available_formats" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="Select File Format" data-select2-id="5" tabindex="-1" aria-hidden="true">
+    <label class="mb-3"><?php _e("Select file format", $this->plugin_name); ?></label>
+    <select id="available-formats" name="available_formats" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select file format", $this->plugin_name); ?>" data-select2-id="5" tabindex="-1" aria-hidden="true">
         <option value="csv_format" <?= ($file_format == "csv_format") ? "selected='selected'": "" ?>>CSV</option>
         <option value="xml_format" <?= ($file_format == "xml_format") ? "selected='selected'": "" ?>>XML</option>
     </select>
