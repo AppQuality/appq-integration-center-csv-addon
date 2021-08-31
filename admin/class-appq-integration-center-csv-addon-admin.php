@@ -272,7 +272,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
             if ( !CsvInspector::has_bugs( $cp_id ) ) {
                 $is_valid_request = false;
-                wp_send_json_error(array( "type" => "warning", "message" => __("Choose some a campaign with bugs", $this->plugin_name) ));
+                wp_send_json_error(array( "type" => "warning", "message" => __("Choose a campaign with bugs", $this->plugin_name) ));
             }
 
             if ( empty( $bug_ids ) ) {
