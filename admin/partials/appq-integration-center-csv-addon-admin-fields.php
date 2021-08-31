@@ -33,7 +33,7 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
     </select>
 </div>
 <div class="row mt-5">
-    <label>Select fields to export</label>
+    <label><?php _e("Select fields to export", $this->plugin_name); ?></label>
     <div id="available-fields" class="col-sm-12 available_fields csv-fields">
         <?php
         foreach ( $data as $key => $value ) {
