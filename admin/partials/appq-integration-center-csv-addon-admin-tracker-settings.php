@@ -16,7 +16,6 @@
     <div class="container">
         <div class="row">
             <div class="col col-md-10">
-
                 <?php
                 $cp_id = $campaign_id;
 
@@ -24,7 +23,7 @@
                 ?>
 
                 <div class="alert alert-warning" role="alert">
-                    In order to be able to export CSVs you should specify the <strong>Campaign ID</strong> first.
+                    <?php _e("In order to be able to export CSVs you should specify the <strong>Campaign ID</strong> first.", $this->plugin_name); ?>
                 </div>
 
                 <?php
@@ -35,14 +34,13 @@
                         ?>
 
                         <div class="alert alert-warning" role="alert">
-                        In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first.
+                            <?php _e("In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first.", $this->plugin_name); ?>
                         </div>
 
                         <?php
                     }
                 }
                 ?>
-
             </div>
         </div>
     </div>
