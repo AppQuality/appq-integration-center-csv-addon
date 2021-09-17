@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: appq-integration-center-jira-addon\n"
-"POT-Creation-Date: 2021-09-02 15:28+0200\n"
+"POT-Creation-Date: 2021-09-17 15:45+0200\n"
 "PO-Revision-Date: 2021-03-29 15:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: AppQuality\n"
@@ -10,13 +10,19 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex;_n;_nx;_n_noop;_nx_noop;"
 "esc_attr__;esc_attr_e;__withlang;esc_html_e;esc_html__;esc_html_x\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
+#: admin/assets/scripts/methods.js:20
+msgctxt "Integration Center Csv export field selection"
+msgid "Select some fields first!"
+msgstr ""
 
 #: admin/class-appq-integration-center-csv-addon-admin.php:199
 #: admin/class-appq-integration-center-csv-addon-admin.php:292
@@ -40,6 +46,7 @@ msgstr ""
 msgid "Choose some bugs first"
 msgstr ""
 
+#: admin/class-appq-integration-center-csv-addon-admin.php:338
 #: admin/class-appq-integration-center-csv-addon-admin.php:376
 msgid "Error"
 msgstr ""
@@ -158,4 +165,12 @@ msgstr ""
 msgid ""
 "In order to be able to export CSVs your campaign should have <strong>Bugs</"
 "strong> first."
+msgstr ""
+
+#: class/class-appq-integration-center-csv-api.php:36
+msgid "Error on bug status update"
+msgstr ""
+
+#: class/class-appq-integration-center-csv-api.php:53
+msgid "Status updated correctly"
 msgstr ""

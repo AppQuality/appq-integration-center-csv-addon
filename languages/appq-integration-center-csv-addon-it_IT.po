@@ -1,20 +1,26 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: appq-integration-center-jira-addon\n"
-"POT-Creation-Date: 2021-09-02 15:28+0200\n"
-"PO-Revision-Date: 2021-09-02 15:28+0200\n"
+"POT-Creation-Date: 2021-09-17 15:45+0200\n"
+"PO-Revision-Date: 2021-09-17 15:47+0200\n"
 "Last-Translator: Luca Cannarozzo <luca.cannarozzo@app-quality.com>\n"
 "Language-Team: AppQuality\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_x;_e;_n\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
+#: admin/assets/scripts/methods.js:20
+msgctxt "Integration Center Csv export field selection"
+msgid "Select some fields first!"
+msgstr "Devi prima selezionare dei campi!"
 
 #: admin/class-appq-integration-center-csv-addon-admin.php:199
 #: admin/class-appq-integration-center-csv-addon-admin.php:292
@@ -38,6 +44,7 @@ msgstr "Scegli una campagna che contiene bug"
 msgid "Choose some bugs first"
 msgstr "Seleziona i bug"
 
+#: admin/class-appq-integration-center-csv-addon-admin.php:338
 #: admin/class-appq-integration-center-csv-addon-admin.php:376
 msgid "Error"
 msgstr "Errore"
@@ -163,3 +170,11 @@ msgid ""
 msgstr ""
 "Per poterla esportare è necessario che la campagna selezionata contenga dei "
 "<strong>bug</strong>."
+
+#: class/class-appq-integration-center-csv-api.php:36
+msgid "Error on bug status update"
+msgstr "Errore durante l'aggiornamento dello stato del bug"
+
+#: class/class-appq-integration-center-csv-api.php:53
+msgid "Status updated correctly"
+msgstr "Stato aggiornato"
