@@ -1,5 +1,5 @@
 function clickAvailableField() {
-    let $this = jQuery( this );
+    var $this = jQuery( this );
     if ( $this.hasClass( "selected" ) ) { $this.removeClass( "selected" ); }
     else { $this.addClass( "selected" ); }
 }
@@ -13,20 +13,20 @@ function clickSaveCSVExport() {
         $submitButton.addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
         // Get format select value
-        let exportFormat = $availableFormatsSelect.val();
+        var exportFormat = $availableFormatsSelect.val();
 
         // Block save if the are not field selected
         if ($availableFieldsContainer.find(".field.selected").length == 0) {
-            toastr["error"]("Select some fields first!");
+            toastr["error"](_x("Select some fields first!", "Integration Center Csv export field selection", "appq-integration-center-csv-addon"));
             // Unlock the buton
             $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
             return false;
         }
 
         // Collect all of the selected fields
-        let fieldKeys = {};
+        var fieldKeys = {};
         $availableFieldsContainer.find( ".field" ).each( function() {
-            let data = {};
+            var data = {};
             data['value'] = jQuery( this ).data( "value" );
             data['description'] = jQuery( this ).data( "description" );
             data['key'] = jQuery( this ).data( "key" );
@@ -38,7 +38,7 @@ function clickSaveCSVExport() {
             fieldKeys[jQuery( this ).data( "key" )] = data;
         } );
 
-        let jsonFieldKeys = JSON.stringify(fieldKeys);
+        var jsonFieldKeys = JSON.stringify(fieldKeys);
 
         // Perform an AJAX Call
         jQuery.ajax( {
@@ -56,7 +56,7 @@ function clickSaveCSVExport() {
 
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = response;
+                    var result = response;
 
                     if (result.data) {
                         if (result.data.message) {
@@ -82,7 +82,7 @@ function clickSend( event ) {
     if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() != "csv_exporter" ) { return false; }
 
     // Get the Bug ID
-    let bugID = jQuery( this ).data( "bug-id" );
+    var bugID = jQuery( this ).data( "bug-id" );
 
     // Check if the Bug ID is stored and in case it's not store it in the array
     if ( bugIDs.indexOf( bugID ) == -1 ) { bugIDs.push( bugID ); }
@@ -119,7 +119,7 @@ function saveCSVExport() {
             success: function( response ) {
                 // Parse Result
                 if ( typeof response !== "undefined" ) {
-                    let result = response;
+                    var result = response;
 
                     if (result.data) {
                         if (result.data.message) {
@@ -129,7 +129,7 @@ function saveCSVExport() {
 
                     // Invoke the Download upon success
                     if ( result.success ) {
-                        let link = document.createElement("a");
+                        var link = document.createElement("a");
                         link.download = result.data.file_name;
                         link.href = result.data.download_url;
                         document.body.appendChild(link);
@@ -171,8 +171,8 @@ function saveCSVExport() {
 }
 
 function newFieldMapping() {
-    let key = jQuery('#add_mapping_field_modal #mapping_modal_key').val();
-    let value = jQuery('#custom_mapping_name').val();
+    var key = jQuery('#add_mapping_field_modal #mapping_modal_key').val();
+    var value = jQuery('#custom_mapping_name').val();
 
     if (!key || !value) { return; }
 
@@ -189,7 +189,7 @@ function newFieldMapping() {
         success: function( response ) {
             // Parse Result
             if ( typeof response !== "undefined" ) {
-                let result = response;
+                var result = response;
 
                 if (result.data) {
                     if (result.data.message) {
@@ -222,7 +222,7 @@ function deleteCSVExport(data) {
         success: function( response ) {
             // Parse Result
             if ( typeof response !== "undefined" ) {
-                let result = response;
+                var result = response;
 
                 if (result.data) {
                     if (result.data.message) {

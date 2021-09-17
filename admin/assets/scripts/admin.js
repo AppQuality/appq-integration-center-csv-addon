@@ -16,6 +16,7 @@ var enableBugUpload = false; // Flag to reset the "is_uploaded" process: connect
 var $newMappingButton;
 var $editMappingModalButton;
 var $submitButton;
+var _x =  wp.i18n._x;
 
 jQuery( document ).ready( function() {
     // Cache Containers

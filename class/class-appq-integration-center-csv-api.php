@@ -33,7 +33,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 			global $wpdb;
 			$response = array(
 				"status" => false,
-				"message" => "Error on bug status update"
+				"message" => __("Error on bug status update", $this->plugin_name)
 			);
 
 			$bug_id = intval( $bug_id );
@@ -50,7 +50,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 
 				if( !is_null( $res ) ) {
 					$response[ "status" ] = true;
-					$response[ "message" ] = "Status updated correctly";
+					$response[ "message" ] = __("Status updated correctly", $this->plugin_name);
 				}
 			}
 		} else {

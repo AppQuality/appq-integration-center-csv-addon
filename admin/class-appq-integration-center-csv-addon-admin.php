@@ -84,8 +84,8 @@ class Appq_Integration_Center_Csv_Addon_Admin {
     public function enqueue_scripts($hook)
     {
         if (strpos($hook, 'integration-center') !== false) {
-            wp_enqueue_script($this->plugin_name . "-methods", plugin_dir_url(__FILE__) . 'assets/scripts/methods.js', array('jquery'), $this->version);
-            wp_enqueue_script($this->plugin_name . "-admin", plugin_dir_url(__FILE__) . 'assets/scripts/admin.js', array('jquery'), $this->version);
+            wp_enqueue_script($this->plugin_name . "-methods", plugin_dir_url(__FILE__) . 'assets/scripts/dist/appq-integration-center-csv-addon.min.js', array('jquery'), $this->version);
+            wp_set_script_translations($this->plugin_name . "-methods", 'appq-integration-center-csv-addon', APPQ_INTEGRATION_CENTER_CSV_PATH . 'languages');
             wp_localize_script($this->plugin_name . "-methods", 'ajax_object', array(
                 'ajax_url'  => admin_url('admin-ajax.php'),
                 'nonce'     => wp_create_nonce('appq-integration-center-csv-ajax-nonce')
@@ -335,7 +335,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                                 $fp = fopen( $file_url, 'w' );
 
                                 if (!$fp) {
-                                    wp_send_json_error(array( "type" => "error", "message" => "Error: " . error_get_last()['message'] ));
+                                    wp_send_json_error(array( "type" => "error", "message" => __("Error", $this->plugin_name) . ": " . error_get_last()['message'] ));
                                     break;
                                 }
 
