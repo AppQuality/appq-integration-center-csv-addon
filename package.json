@@ -1,0 +1,16 @@
+{
+  "name": "appq-integration-center-csv-addon",
+  "version": "1.0.0",
+  "description": "=== Plugin Name ===\r Contributors: (this should be a list of wordpress.org userid's)\r Donate link: https://bitbucket.org/appqdevel/appq-integration-center-csv-addon/src/master/\r Tags: csv export, csv, export\r Requires at least: 3.0.1\r Tested up to: 5.5\r Stable tag: 1.0\r License: GPLv2 or later\r License URI: http://www.gnu.org/licenses/gpl-2.0.html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.4.1",
+    "grunt-contrib-uglify": "^3.4.0",
+    "load-grunt-tasks": "^5.1.0"
+  }
+}
