@@ -16,7 +16,7 @@ module.exports = function(grunt)
             
             // config options used in the uglify task to minify scripts
             uglify: {
-                integration_center_admin: {
+                integration_center_csv: {
                     options: {
                         sourceMap: false,
                         mangle: {
@@ -25,28 +25,10 @@ module.exports = function(grunt)
                         sourceMapName: 'sourceMap.map'
                     },
                     src: [
-                        'src/admin/scripts/hold.js',
-                        'src/admin/scripts/components/add-field-modal.js',
-                        'src/admin/scripts/components/copy-to-clipboard.js',
-                        'src/admin/scripts/components/cp-configuration-modal.js',
-                        'src/admin/scripts/components/delete-settings.js',
-                        'src/admin/scripts/components/select2.js',
+                        'admin/assets/scripts/admin.js',
+                        'admin/assets/scripts/methods.js'
                     ],
-                    dest: 'assets/js/admin.min.js'
-                },
-                integration_center_front: {
-                    options: {
-                        sourceMap: false,
-                        mangle: {
-                            reserved: ['__', '_x']
-                        },
-                        sourceMapName: 'sourceMap.map'
-                    },
-                    src: [
-                        'src/front/scripts/components/intro.js',
-                        'src/front/scripts/components/tooltips.js'
-                    ],
-                    dest: 'assets/js/front.min.js'
+                    dest: 'admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js'
                 }
             }
         });
