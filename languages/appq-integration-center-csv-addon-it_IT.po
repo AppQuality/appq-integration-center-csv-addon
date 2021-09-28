@@ -1,7 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: appq-integration-center-jira-addon\n"
-"POT-Creation-Date: 2021-09-17 15:45+0200\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appq-integration-"
+"center-csv-addon\n"
+"POT-Creation-Date: 2021-09-28T08:41:50+00:00\n"
 "PO-Revision-Date: 2021-09-17 15:47+0200\n"
 "Last-Translator: Luca Cannarozzo <luca.cannarozzo@app-quality.com>\n"
 "Language-Team: AppQuality\n"
@@ -16,165 +18,144 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_x;_e;_n\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
+#. Plugin Name of the plugin
+msgid "Integration Center - CSV Export"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "bitbucket/appq-integration-csv-addon"
+msgstr ""
+
+#. Description of the plugin
+msgid "Allow you to export Bugs as CSV Export"
+msgstr ""
+
+#. Author of the plugin
+msgid "AppQuality"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
+msgstr ""
+
 #: admin/assets/scripts/methods.js:20
 msgctxt "Integration Center Csv export field selection"
 msgid "Select some fields first!"
 msgstr "Devi prima selezionare dei campi!"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:199
-#: admin/class-appq-integration-center-csv-addon-admin.php:292
-msgid "Choose some fields first"
-msgstr "Scegli i campi"
+#~ msgid "Choose some fields first"
+#~ msgstr "Scegli i campi"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:251
-msgid "Tracker settings updated!"
-msgstr "Impostazioni tracker aggiornate!"
+#~ msgid "Tracker settings updated!"
+#~ msgstr "Impostazioni tracker aggiornate!"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:254
-#: admin/class-appq-integration-center-csv-addon-admin.php:405
-msgid "Choose a campaign ID"
-msgstr "Scegli un campaign ID"
+#~ msgid "Choose a campaign ID"
+#~ msgstr "Scegli un campaign ID"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:275
-msgid "Choose a campaign with bugs"
-msgstr "Scegli una campagna che contiene bug"
+#~ msgid "Choose a campaign with bugs"
+#~ msgstr "Scegli una campagna che contiene bug"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:280
-msgid "Choose some bugs first"
-msgstr "Seleziona i bug"
+#~ msgid "Choose some bugs first"
+#~ msgstr "Seleziona i bug"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:338
-#: admin/class-appq-integration-center-csv-addon-admin.php:376
-msgid "Error"
-msgstr "Errore"
+#~ msgid "Error"
+#~ msgstr "Errore"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:400
-msgid "Your export will be downloaded soon!"
-msgstr "Il tuo file verrà scaricato a breve!"
+#~ msgid "Your export will be downloaded soon!"
+#~ msgstr "Il tuo file verrà scaricato a breve!"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:415
-msgid "Missing campaign ID"
-msgstr "Campaign ID mancante"
+#~ msgid "Missing campaign ID"
+#~ msgstr "Campaign ID mancante"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:417
-msgid "Missing field to update"
-msgstr "Campo da aggiornare mancante"
+#~ msgid "Missing field to update"
+#~ msgstr "Campo da aggiornare mancante"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:419
-msgid "Missing value for field to update"
-msgstr "Valore per il campo da aggiornare mancante"
+#~ msgid "Missing value for field to update"
+#~ msgstr "Valore per il campo da aggiornare mancante"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:431
-msgid "Set tracker settings first"
-msgstr "Imposta i settaggi per il tracker"
+#~ msgid "Set tracker settings first"
+#~ msgstr "Imposta i settaggi per il tracker"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:460
-msgid "Your fields are saved successfully!"
-msgstr "I campi sono stati salvati correttamente!"
+#~ msgid "Your fields are saved successfully!"
+#~ msgstr "I campi sono stati salvati correttamente!"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:468
-msgid "You don't have the permission to do this"
-msgstr "Non hai i permessi per questa azione"
+#~ msgid "You don't have the permission to do this"
+#~ msgstr "Non hai i permessi per questa azione"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:475
-msgid "Missing file name"
-msgstr "Nome file mancante"
+#~ msgid "Missing file name"
+#~ msgstr "Nome file mancante"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:479
-msgid "Wrong file extension"
-msgstr "Estensione file non riconosciuta"
+#~ msgid "Wrong file extension"
+#~ msgstr "Estensione file non riconosciuta"
 
-#: admin/class-appq-integration-center-csv-addon-admin.php:490
-msgid "File not found"
-msgstr "File non trovato"
+#~ msgid "File not found"
+#~ msgstr "File non trovato"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-fields.php:29
-#: admin/partials/appq-integration-center-csv-addon-admin-fields.php:30
-msgid "Select file format"
-msgstr "Seleziona il formato del file"
+#~ msgid "Select file format"
+#~ msgstr "Seleziona il formato del file"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-fields.php:36
-msgid "Select fields to export"
-msgstr "Seleziona i campi da esportare"
+#~ msgid "Select fields to export"
+#~ msgstr "Seleziona i campi da esportare"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/edit-mapping-field-modal.php:8
-msgid "Add/edit field mapping"
-msgstr "Aggiungi/modifica mapping dei campi"
+#~ msgid "Add/edit field mapping"
+#~ msgstr "Aggiungi/modifica mapping dei campi"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/edit-mapping-field-modal.php:20
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:19
-msgid "Name"
-msgstr "Nome"
+#~ msgid "Name"
+#~ msgstr "Nome"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/edit-mapping-field-modal.php:21
-msgid "summary"
-msgstr "riepilogo"
+#~ msgid "summary"
+#~ msgstr "riepilogo"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/edit-mapping-field-modal.php:26
-msgid "Save field"
-msgstr "Salva campo"
+#~ msgid "Save field"
+#~ msgstr "Salva campo"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/edit-mapping-field-modal.php:29
-msgid "Cancel"
-msgstr "Annulla"
+#~ msgid "Cancel"
+#~ msgstr "Annulla"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:14
-msgid "Field mapping"
-msgstr "Mapping dei campi"
+#~ msgid "Field mapping"
+#~ msgstr "Mapping dei campi"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:20
-msgid "CSV column name"
-msgstr "Nome colonna del file CSV"
+#~ msgid "CSV column name"
+#~ msgstr "Nome colonna del file CSV"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:25
-msgid "Content"
-msgstr "Contenuto"
+#~ msgid "Content"
+#~ msgstr "Contenuto"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:26
-msgid ""
-"The content you want to set the CSV field to. {Bug.*} fields will be "
-"replaced with the bug data"
-msgstr ""
-"Il contenuto che si vuole impostare  per il campo. {Bug.*} sarà sostituito "
-"con i dati del bug"
+#~ msgid ""
+#~ "The content you want to set the CSV field to. {Bug.*} fields will be "
+#~ "replaced with the bug data"
+#~ msgstr ""
+#~ "Il contenuto che si vuole impostare  per il campo. {Bug.*} sarà "
+#~ "sostituito con i dati del bug"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:31
-msgid "Description"
-msgstr "Descrizione"
+#~ msgid "Description"
+#~ msgstr "Descrizione"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:32
-msgid "The description of the field"
-msgstr "Descrizione del campo"
+#~ msgid "The description of the field"
+#~ msgstr "Descrizione del campo"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:37
-msgid "Selected"
-msgstr "Selezionato"
+#~ msgid "Selected"
+#~ msgstr "Selezionato"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-settings/field-mapping.php:38
-msgid "If the field has been selected for the export"
-msgstr "Indica se il campo è stato selezionato nel file da esportare"
+#~ msgid "If the field has been selected for the export"
+#~ msgstr "Indica se il campo è stato selezionato nel file da esportare"
 
-#: admin/partials/appq-integration-center-csv-addon-admin-tracker-settings.php:26
-msgid ""
-"In order to be able to export CSVs you should specify the <strong>Campaign "
-"ID</strong> first."
-msgstr ""
-"Per poterla esportare è necessario specificare l'<strong>ID della campagna</"
-"strong>."
+#~ msgid ""
+#~ "In order to be able to export CSVs you should specify the "
+#~ "<strong>Campaign ID</strong> first."
+#~ msgstr ""
+#~ "Per poterla esportare è necessario specificare l'<strong>ID della "
+#~ "campagna</strong>."
 
-#: admin/partials/appq-integration-center-csv-addon-admin-tracker-settings.php:37
-msgid ""
-"In order to be able to export CSVs your campaign should have <strong>Bugs</"
-"strong> first."
-msgstr ""
-"Per poterla esportare è necessario che la campagna selezionata contenga dei "
-"<strong>bug</strong>."
+#~ msgid ""
+#~ "In order to be able to export CSVs your campaign should have "
+#~ "<strong>Bugs</strong> first."
+#~ msgstr ""
+#~ "Per poterla esportare è necessario che la campagna selezionata contenga "
+#~ "dei <strong>bug</strong>."
 
-#: class/class-appq-integration-center-csv-api.php:36
-msgid "Error on bug status update"
-msgstr "Errore durante l'aggiornamento dello stato del bug"
+#~ msgid "Error on bug status update"
+#~ msgstr "Errore durante l'aggiornamento dello stato del bug"
 
-#: class/class-appq-integration-center-csv-api.php:53
-msgid "Status updated correctly"
-msgstr "Stato aggiornato"
+#~ msgid "Status updated correctly"
+#~ msgstr "Stato aggiornato"
