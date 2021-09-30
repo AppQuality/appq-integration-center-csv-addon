@@ -10,15 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    # This check needs to be in place to prevent a publish loop with auto and github actions
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    
     steps:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.REPO_PAT }}
 
-    - name: Use Node.js 14.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v1
       with:
-        node-version: 14.x
+        node-version: 16.x
     - name: Build
       run: |
         npm ci
@@ -29,6 +32,8 @@ jobs:
         if [[ `git status --porcelain` ]]; then
           git config --global user.name 'Github'
           git config --global user.email 'cannarocks@users.noreply.github.com'
-          git commit -am "chore: executed grunt command"
+          git commit -am "chore: executed grunt command (ci skip)"
           git push
-        fi 
+        else
+          echo 'Nothing to commit'
+        fi
