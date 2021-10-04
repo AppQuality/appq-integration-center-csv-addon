@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: appq-integration-center-jira-addon\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appq-integration-"
 "center-csv-addon\n"
-"POT-Creation-Date: 2021-10-04T09:35:00+00:00\n"
-"PO-Revision-Date: 2021-10-04 11:45+0200\n"
+"POT-Creation-Date: 2021-10-04 12:44+0200\n"
+"PO-Revision-Date: 2021-10-04 12:45+0200\n"
 "Last-Translator: Luca Cannarozzo <luca.cannarozzo@app-quality.com>\n"
 "Language-Team: AppQuality\n"
 "Language: it\n"
@@ -18,25 +18,11 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_x;_e;_n\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#. Plugin Name of the plugin
-msgid "Integration Center - CSV Export"
-msgstr "Centro Integrazione - CSV Export"
-
-#. Plugin URI of the plugin
-msgid "bitbucket/appq-integration-csv-addon"
-msgstr "bitbucket/appq-integration-csv-addon"
-
-#. Description of the plugin
-msgid "Allow you to export Bugs as CSV Export"
-msgstr "Permette di esportare bug come csv"
-
-#. Author of the plugin
-msgid "AppQuality"
-msgstr "AppQuality"
-
-#. Author URI of the plugin
-msgid "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
-msgstr "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
+#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
+#: admin/assets/scripts/methods.js:20
+msgctxt "Integration Center Csv export field selection"
+msgid "Select some fields first!"
+msgstr "Devi prima selezionare dei campi!"
 
 #: admin/class-appq-integration-center-csv-addon-admin.php:199
 #: admin/class-appq-integration-center-csv-addon-admin.php:292
@@ -187,13 +173,25 @@ msgstr ""
 "Per poterla esportare è necessario che la campagna selezionata contenga dei "
 "<strong>bug</strong>."
 
-#: admin/assets/scripts/methods.js:20
-msgctxt "Integration Center Csv export field selection"
-msgid "Select some fields first!"
-msgstr "Devi prima selezionare dei campi!"
+#: class/class-appq-integration-center-csv-api.php:36
+msgid "Error on bug status update"
+msgstr "Errore durante l'aggiornamento dello stato del bug"
 
-#~ msgid "Error on bug status update"
-#~ msgstr "Errore durante l'aggiornamento dello stato del bug"
+#: class/class-appq-integration-center-csv-api.php:53
+msgid "Status updated correctly"
+msgstr "Stato aggiornato"
 
-#~ msgid "Status updated correctly"
-#~ msgstr "Stato aggiornato"
+#~ msgid "Integration Center - CSV Export"
+#~ msgstr "Centro Integrazione - CSV Export"
+
+#~ msgid "bitbucket/appq-integration-csv-addon"
+#~ msgstr "bitbucket/appq-integration-csv-addon"
+
+#~ msgid "Allow you to export Bugs as CSV Export"
+#~ msgstr "Permette di esportare bug come csv"
+
+#~ msgid "AppQuality"
+#~ msgstr "AppQuality"
+
+#~ msgid "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
+#~ msgstr "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
