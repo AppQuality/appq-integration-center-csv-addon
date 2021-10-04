@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appq-integration-"
 "center-csv-addon\n"
 "POT-Creation-Date: 2021-10-04T09:35:00+00:00\n"
-"PO-Revision-Date: 2021-09-30 17:25+0200\n"
+"PO-Revision-Date: 2021-10-04 11:45+0200\n"
 "Last-Translator: Luca Cannarozzo <luca.cannarozzo@app-quality.com>\n"
 "Language-Team: AppQuality\n"
 "Language: it\n"
@@ -20,23 +20,23 @@ msgstr ""
 
 #. Plugin Name of the plugin
 msgid "Integration Center - CSV Export"
-msgstr ""
+msgstr "Centro Integrazione - CSV Export"
 
 #. Plugin URI of the plugin
 msgid "bitbucket/appq-integration-csv-addon"
-msgstr ""
+msgstr "bitbucket/appq-integration-csv-addon"
 
 #. Description of the plugin
 msgid "Allow you to export Bugs as CSV Export"
-msgstr ""
+msgstr "Permette di esportare bug come csv"
 
 #. Author of the plugin
 msgid "AppQuality"
-msgstr ""
+msgstr "AppQuality"
 
 #. Author URI of the plugin
 msgid "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
-msgstr ""
+msgstr "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
 
 #: admin/class-appq-integration-center-csv-addon-admin.php:199
 #: admin/class-appq-integration-center-csv-addon-admin.php:292
