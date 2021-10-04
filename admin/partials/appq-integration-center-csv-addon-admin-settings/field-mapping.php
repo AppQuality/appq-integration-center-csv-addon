@@ -11,31 +11,31 @@ if (!empty($field_mapping)) {
 ?>
 
     <div class="row">
-        <div class="col-6"><?php printf('<h4 class="title py-3">%s</h4>', __('Field mapping', $this->plugin_name)); ?></div>
+        <div class="col-6"><?php printf('<h4 class="title py-3">%s</h4>', __('Field mapping', 'appq-integration-center-csv-addon')); ?></div>
     </div>
     <div class="row mb-2">
         <div class="col-2">
 			<small>
-				<strong><?= __('Name', $this->plugin_name); ?></strong>
-				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('CSV column name', $this->plugin_name) ?>"></i>
+				<strong><?= __('Name', 'appq-integration-center-csv-addon'); ?></strong>
+				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('CSV column name', 'appq-integration-center-csv-addon') ?>"></i>
 			</small>
         </div>
         <div class="col-2">
 			<small>
-				<strong><?= __('Content', $this->plugin_name); ?></strong>
-				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('The content you want to set the CSV field to. {Bug.*} fields will be replaced with the bug data', $this->plugin_name) ?>"></i>
+				<strong><?= __('Content', 'appq-integration-center-csv-addon'); ?></strong>
+				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('The content you want to set the CSV field to. {Bug.*} fields will be replaced with the bug data', 'appq-integration-center-csv-addon') ?>"></i>
 			</small>
         </div>
 		<div class="col-4">
 			<small>
-				<strong><?= __('Description', $this->plugin_name); ?></strong>
-				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('The description of the field', $this->plugin_name) ?>"></i>
+				<strong><?= __('Description', 'appq-integration-center-csv-addon'); ?></strong>
+				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('The description of the field', 'appq-integration-center-csv-addon') ?>"></i>
 			</small>
         </div>
 		<div class="col-2 text-center">
 			<small>
-				<strong><?= __('Selected', $this->plugin_name); ?></strong>
-				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('If the field has been selected for the export', $this->plugin_name) ?>"></i>
+				<strong><?= __('Selected', 'appq-integration-center-csv-addon'); ?></strong>
+				<i class="fa fa-question-circle" data-toggle="tooltip" title="<?= __('If the field has been selected for the export', 'appq-integration-center-csv-addon') ?>"></i>
 			</small>
         </div>
     </div>

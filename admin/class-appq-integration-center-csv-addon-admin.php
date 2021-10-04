@@ -196,7 +196,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
             if ( empty( $field_keys ) ) {
                 $is_valid_request = false;
-                wp_send_json_error(array( "type" => "error", "message" => __("Choose some fields first", $this->plugin_name) ));
+                wp_send_json_error(array( "type" => "error", "message" => __("Choose some fields first", 'appq-integration-center-csv-addon') ));
             }
 
             if ( $is_valid_request ) {
@@ -248,10 +248,10 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     wp_send_json_error();
                 }
                 
-                wp_send_json_success(array( "type" => "success", "message" => __("Tracker settings updated!", $this->plugin_name) ));
+                wp_send_json_success(array( "type" => "success", "message" => __("Tracker settings updated!", 'appq-integration-center-csv-addon') ));
             }
         } else {
-            wp_send_json_error(array( "type" => "error", "message" => __("Choose a campaign ID", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Choose a campaign ID", 'appq-integration-center-csv-addon') ));
         }
     }
 
@@ -272,12 +272,12 @@ class Appq_Integration_Center_Csv_Addon_Admin {
 
             if ( !CsvInspector::has_bugs( $cp_id ) ) {
                 $is_valid_request = false;
-                wp_send_json_error(array( "type" => "warning", "message" => __("Choose a campaign with bugs", $this->plugin_name) ));
+                wp_send_json_error(array( "type" => "warning", "message" => __("Choose a campaign with bugs", 'appq-integration-center-csv-addon') ));
             }
 
             if ( empty( $bug_ids ) ) {
                 $is_valid_request = false;
-                wp_send_json_error(array( "type" => "error", "message" => __("Choose some bugs first", $this->plugin_name) ));
+                wp_send_json_error(array( "type" => "error", "message" => __("Choose some bugs first", 'appq-integration-center-csv-addon') ));
             }
 
             if ( $is_valid_request ) {
@@ -289,7 +289,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                 // Check if the Fields were already stored
                 if ( empty( $field_keys ) ) {
                     $is_valid_request = false;
-                    wp_send_json_error(array( "type" => "error", "message" => __("Choose some fields first", $this->plugin_name) ));
+                    wp_send_json_error(array( "type" => "error", "message" => __("Choose some fields first", 'appq-integration-center-csv-addon') ));
                 }
 
                 if ( $is_valid_request ) {
@@ -335,7 +335,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                                 $fp = fopen( $file_url, 'w' );
 
                                 if (!$fp) {
-                                    wp_send_json_error(array( "type" => "error", "message" => __("Error", $this->plugin_name) . ": " . error_get_last()['message'] ));
+                                    wp_send_json_error(array( "type" => "error", "message" => __("Error", 'appq-integration-center-csv-addon') . ": " . error_get_last()['message'] ));
                                     break;
                                 }
 
@@ -373,7 +373,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                                 $status = $dom->save($file_url);
 
                                 if (!$status) {
-                                    wp_send_json_error(array( "type" => "error", "message" => __("Error", $this->plugin_name) . ": " . error_get_last()['message'] ));
+                                    wp_send_json_error(array( "type" => "error", "message" => __("Error", 'appq-integration-center-csv-addon') . ": " . error_get_last()['message'] ));
                                 }
 
                                 break;
@@ -397,12 +397,12 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         "file_name"     => $file_name,
                         "file_url"      => $file_url,
                         "format"        => $file_format,
-                        "message"       => __("Your export will be downloaded soon!", $this->plugin_name)
+                        "message"       => __("Your export will be downloaded soon!", 'appq-integration-center-csv-addon')
                     ));
                 }
             }
         } else {
-            wp_send_json_error(array( "type" => "error", "message" => __("Choose a campaign ID", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Choose a campaign ID", 'appq-integration-center-csv-addon') ));
         }
     }
 
@@ -412,11 +412,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         $value = isset( $_POST[ "value" ] ) && !empty( $_POST[ "value" ] ) ? $_POST[ "value" ] : "";
 
         if (empty($cp_id)) {
-            wp_send_json_error(array( "type" => "error", "message" => __("Missing campaign ID", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Missing campaign ID", 'appq-integration-center-csv-addon') ));
         } else if (empty($key)) {
-            wp_send_json_error(array( "type" => "error", "message" => __("Missing field to update", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Missing field to update", 'appq-integration-center-csv-addon') ));
         } else if (empty($value)) {
-            wp_send_json_error(array( "type" => "error", "message" => __("Missing value for field to update", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Missing value for field to update", 'appq-integration-center-csv-addon') ));
         } else {
             global $wpdb;
             $appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
@@ -428,7 +428,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             );
 
             if (empty($results_)) {
-                wp_send_json_error(array( "type" => "error", "message" => __("Set tracker settings first", $this->plugin_name) ));
+                wp_send_json_error(array( "type" => "error", "message" => __("Set tracker settings first", 'appq-integration-center-csv-addon') ));
             } else { // Update the field mapping
                 $field_mapping = json_decode($results_[0]->field_mapping);
                 foreach ($field_mapping as $field_key => $field_value) {
@@ -457,7 +457,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     )
                 );
                 
-                wp_send_json_success(array( "type" => "success", "message" => __("Your fields are saved successfully!", $this->plugin_name) ));
+                wp_send_json_success(array( "type" => "success", "message" => __("Your fields are saved successfully!", 'appq-integration-center-csv-addon') ));
             }
         }
     }
@@ -465,18 +465,18 @@ class Appq_Integration_Center_Csv_Addon_Admin {
     public function appq_delete_csv_export()
     {
         if (!check_ajax_referer('appq-integration-center-csv-ajax-nonce', 'nonce', false)) {
-            wp_send_json_error(array( "type" => "error", "message" => __("You don't have the permission to do this", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("You don't have the permission to do this", 'appq-integration-center-csv-addon') ));
         }
 
         $file_name = array_key_exists('file_name', $_POST) ? $_POST['file_name'] : '';
         $file_ext = end(explode(".", $file_name));
 
         if ($file_name === "") {
-            wp_send_json_error(array( "type" => "error", "message" => __("Missing file name", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Missing file name", 'appq-integration-center-csv-addon') ));
         }
 
         if ($file_ext !== "csv" && $file_ext !== "xml") {
-            wp_send_json_error(array( "type" => "error", "message" => __("Wrong file extension", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("Wrong file extension", 'appq-integration-center-csv-addon') ));
         }
 
         $file_url = ABSPATH . "wp-content/plugins/appq-integration-center-csv-addon/tmp/$file_name";
@@ -487,7 +487,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             
             wp_send_json_success();
         } else {
-            wp_send_json_error(array( "type" => "error", "message" => __("File not found", $this->plugin_name) ));
+            wp_send_json_error(array( "type" => "error", "message" => __("File not found", 'appq-integration-center-csv-addon') ));
         }
     }
 }

@@ -23,7 +23,7 @@
                 ?>
 
                 <div class="alert alert-warning" role="alert">
-                    <?php _e("In order to be able to export CSVs you should specify the <strong>Campaign ID</strong> first.", $this->plugin_name); ?>
+                    <?php _e("In order to be able to export CSVs you should specify the <strong>Campaign ID</strong> first.", 'appq-integration-center-csv-addon'); ?>
                 </div>
 
                 <?php
@@ -34,7 +34,7 @@
                         ?>
 
                         <div class="alert alert-warning" role="alert">
-                            <?php _e("In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first.", $this->plugin_name); ?>
+                            <?php _e("In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first.", 'appq-integration-center-csv-addon'); ?>
                         </div>
 
                         <?php
