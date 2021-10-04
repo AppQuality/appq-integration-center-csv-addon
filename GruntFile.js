@@ -28,7 +28,7 @@ module.exports = function(grunt)
                         'admin/assets/scripts/admin.js',
                         'admin/assets/scripts/methods.js'
                     ],
-                    dest: 'admin/assets/scripts/dist/appq-integration-center-csv-addon.dist.js'
+                    dest: 'admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js'
                 }
             }
         });
