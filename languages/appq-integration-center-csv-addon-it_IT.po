@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: appq-integration-center-jira-addon\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appq-integration-"
 "center-csv-addon\n"
-"POT-Creation-Date: 2021-10-04T10:50:33+00:00\n"
+"POT-Creation-Date: 2021-10-04T11:03:47+00:00\n"
 "PO-Revision-Date: 2021-10-04 12:45+0200\n"
 "Last-Translator: Luca Cannarozzo <luca.cannarozzo@app-quality.com>\n"
 "Language-Team: AppQuality\n"
@@ -187,6 +187,7 @@ msgstr ""
 "Per poterla esportare è necessario che la campagna selezionata contenga dei "
 "<strong>bug</strong>."
 
+#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
 #: admin/assets/scripts/methods.js:20
 msgctxt "Integration Center Csv export field selection"
 msgid "Select some fields first!"

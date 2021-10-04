@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-10-04T10:59:28+00:00\n"
+"POT-Creation-Date: 2021-10-04T11:03:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: appq-integration-center-csv-addon\n"
@@ -171,6 +171,7 @@ msgstr ""
 msgid "In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first."
 msgstr ""
 
+#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
 #: admin/assets/scripts/methods.js:20
 msgctxt "Integration Center Csv export field selection"
 msgid "Select some fields first!"
