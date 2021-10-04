@@ -1,6 +1,5 @@
 # Copyright (C) 2021 AppQuality
 # This file is distributed under the GPL-2.0+.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Integration Center - CSV Export 1.0.0\n"
@@ -10,19 +9,29 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-10-04 12:44+0200\n"
+"POT-Creation-Date: 2021-10-04T10:50:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: appq-integration-center-csv-addon\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2;_n_noop:1,2;_nx_noop:1,2;esc_attr__;esc_attr_e;__withlang;esc_html_e;esc_html__;esc_html_x\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: .github\n"
 
-#: admin/assets/scripts/dist/appq-integration-center-csv-addon.min.js:1
-#: admin/assets/scripts/methods.js:20
-msgctxt "Integration Center Csv export field selection"
-msgid "Select some fields first!"
+#. Plugin Name of the plugin
+msgid "Integration Center - CSV Export"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "bitbucket/appq-integration-csv-addon"
+msgstr ""
+
+#. Description of the plugin
+msgid "Allow you to export Bugs as CSV Export"
+msgstr ""
+
+#. Author of the plugin
+msgid "AppQuality"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://bitbucket.org/appqdevel/appq-integration-csv-addon"
 msgstr ""
 
 #: admin/class-appq-integration-center-csv-addon-admin.php:199
@@ -162,10 +171,7 @@ msgstr ""
 msgid "In order to be able to export CSVs your campaign should have <strong>Bugs</strong> first."
 msgstr ""
 
-#: class/class-appq-integration-center-csv-api.php:36
-msgid "Error on bug status update"
-msgstr ""
-
-#: class/class-appq-integration-center-csv-api.php:53
-msgid "Status updated correctly"
+#: admin/assets/scripts/methods.js:20
+msgctxt "Integration Center Csv export field selection"
+msgid "Select some fields first!"
 msgstr ""
