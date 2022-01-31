@@ -86,7 +86,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         if (strpos($hook, 'integration-center') !== false) {
             wp_enqueue_script($this->plugin_name . "-methods", plugin_dir_url(__FILE__) . 'assets/scripts/dist/appq-integration-center-csv-addon.min.js', array('jquery'), $this->version);
             wp_set_script_translations($this->plugin_name . "-methods", 'appq-integration-center-csv-addon', APPQ_INTEGRATION_CENTER_CSV_PATH . 'languages');
-            wp_localize_script($this->plugin_name . "-methods", 'ajax_object', array(
+            wp_localize_script($this->plugin_name . "-methods", 'integration_center_obj', array(
                 'ajax_url'  => admin_url('admin-ajax.php'),
                 'nonce'     => wp_create_nonce('appq-integration-center-csv-ajax-nonce')
             ));
