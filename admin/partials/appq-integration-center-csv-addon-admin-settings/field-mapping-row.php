@@ -5,11 +5,11 @@
 					<div class="col-2 text-center"><?= $_selected_icon ?></div>
 					<div class="col-2 text-right actions">
 						<button data-toggle="modal" data-target="#add_mapping_field_modal" type="button" class="btn btn-info btn-icon-toggle mr-1 edit-mapping-field"
-							data-key="<?= $_key; ?>"
-							data-value="<?= $_item->value ? $_item->value : '' ?>"
-							data-description="<?= $_item->description ? $_item->description : '' ?>"
-							data-selected="<?= $_item->selected ? $_item->selected : '' ?>">
-								<i class="fa fa-pencil"></i>
+								data-key="<?= esc_attr($_key); ?>" 
+								data-value="<?= $_item->value ? esc_attr($_item->value) : '' ?>" 
+								data-description="<?= $_item->description ? esc_attr($_item->description) : '' ?>" 
+								data-selected="<?= $_item->selected ? esc_attr($_item->selected) : '' ?>">
+							<i class="fa fa-pencil"></i>
 						</button>
 					</div>
 				</div>

@@ -112,9 +112,9 @@ class Appq_Integration_Center_Csv_Addon_Admin {
     public function get_settings($campaign, $template_name = 'settings')
     {
         if (!in_array($template_name, ['tracker-settings', 'fields-settings'])) return;
-        global $wpdb;
-        $config = $wpdb->get_row(
-            $wpdb->prepare('SELECT * FROM ' . $wpdb->prefix . 'appq_integration_center_config WHERE campaign_id = %d AND integration = %s', $campaign->id, $this->integration['slug'])
+        global $tbdb;
+        $config = $tbdb->get_row(
+            $tbdb->prepare('SELECT * FROM ' . $tbdb->prefix . 'appq_integration_center_config WHERE campaign_id = %d AND integration = %s', $campaign->id, $this->integration['slug'])
         );
 
         $this->partial($template_name, [
@@ -160,12 +160,12 @@ class Appq_Integration_Center_Csv_Addon_Admin {
      * @return array
      */
     public static function get_custom_fields($campaign_id) {
-        global $wpdb;
+        global $tbdb;
 
-        $sql = $wpdb->prepare('SELECT * FROM wp_appq_integration_center_custom_map 
+        $sql = $tbdb->prepare('SELECT * FROM wp_appq_integration_center_custom_map 
 			WHERE campaign_id = %d',$campaign_id);
 
-        return $wpdb->get_results($sql);
+        return $tbdb->get_results($sql);
     }
 
     public function current_setup( $campaign = null )
@@ -200,17 +200,17 @@ class Appq_Integration_Center_Csv_Addon_Admin {
             }
 
             if ( $is_valid_request ) {
-                global $wpdb;
-                $appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+                global $tbdb;
+                $appq_integration_center_config = $tbdb->prefix ."appq_integration_center_config";
 
                 // Check if the Campaign was already stored
-                $results_ = $wpdb->get_results(
-                    $wpdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
+                $results_ = $tbdb->get_results(
+                    $tbdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
                     OBJECT
                 );
 
                 if ( !empty( $results_ ) ) { // Update the Config
-                    $wpdb->update(
+                    $tbdb->update(
                         $appq_integration_center_config,
                         array(
                             "field_mapping" => $field_keys,
@@ -225,7 +225,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         )
                     );
                 } else { // Insert the Config
-                    $wpdb->insert(
+                    $tbdb->insert(
                         $appq_integration_center_config,
                         array(
                             "campaign_id" => $cp_id,
@@ -239,11 +239,11 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                 }
 
                 // Deactivate all other integrations
-                $sql = 'UPDATE '.$wpdb->prefix .'appq_integration_center_config
+                $sql = 'UPDATE '.$tbdb->prefix .'appq_integration_center_config
 	            SET is_active = 0
 	            WHERE campaign_id = %d AND integration != "csv_exporter";';
-                $sql = $wpdb->prepare($sql,$cp_id);
-                $res = $wpdb->query($sql);
+                $sql = $tbdb->prepare($sql,$cp_id);
+                $res = $tbdb->query($sql);
                 if ($res === false) {
                     wp_send_json_error();
                 }
@@ -418,12 +418,12 @@ class Appq_Integration_Center_Csv_Addon_Admin {
         } else if (empty($value)) {
             wp_send_json_error(array( "type" => "error", "message" => __("Missing value for field to update", 'appq-integration-center-csv-addon') ));
         } else {
-            global $wpdb;
-            $appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+            global $tbdb;
+            $appq_integration_center_config = $tbdb->prefix ."appq_integration_center_config";
 
             // Check if the Integration was already stored for the campaign
-            $results_ = $wpdb->get_results(
-                $wpdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
+            $results_ = $tbdb->get_results(
+                $tbdb->prepare( "SELECT * FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $cp_id, $this->integration[ "slug" ] ) ),
                 OBJECT
             );
 
@@ -439,7 +439,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                     }
                 }
 
-                $wpdb->update(
+                $tbdb->update(
                     $appq_integration_center_config,
                     array(
                         "field_mapping" => json_encode($field_mapping),

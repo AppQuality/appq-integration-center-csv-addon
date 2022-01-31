@@ -30,7 +30,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 
     function csv_bug_upload( $bug_id ) {
 		if ($this->_enable_bug_upload) {
-			global $wpdb;
+			global $tbdb;
 			$response = array(
 				"status" => false,
 				"message" => __("Error on bug status update", $this->plugin_name)
@@ -42,7 +42,7 @@ class CSVRestApi extends IntegrationCenterRestApi
 				$bug_id > 0 &&
 				!empty( $this->get_selected_fields() )
 			) {
-				$res = $wpdb->insert($wpdb->prefix . 'appq_integration_center_bugs', array(
+				$res = $tbdb->insert($tbdb->prefix . 'appq_integration_center_bugs', array(
 					'bug_id' => $bug_id,
 					'bugtracker_id' => null,
 					'integration' => $this->integration["slug"],
@@ -77,12 +77,12 @@ class CSVRestApi extends IntegrationCenterRestApi
 		$result = array();
 
 		if ( $campaign_id > 0 ) {
-			global $wpdb;
-			$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+			global $tbdb;
+			$appq_integration_center_config = $tbdb->prefix ."appq_integration_center_config";
 
 			// Check if the Campaign was already stored
-			$results_ = $wpdb->get_results(
-				$wpdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+			$results_ = $tbdb->get_results(
+				$tbdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
 				OBJECT
 			);
 
@@ -112,12 +112,12 @@ class CSVRestApi extends IntegrationCenterRestApi
         $selected_fields = array();
 
 		if ( $campaign_id > 0 ) {
-			global $wpdb;
-			$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+			global $tbdb;
+			$appq_integration_center_config = $tbdb->prefix ."appq_integration_center_config";
 
 			// Check if the Campaign was already stored
-			$results_ = $wpdb->get_results(
-				$wpdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+			$results_ = $tbdb->get_results(
+				$tbdb->prepare( "SELECT field_mapping FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
 				OBJECT
 			);
 
@@ -145,12 +145,12 @@ class CSVRestApi extends IntegrationCenterRestApi
 	 */
 
 	public function get_format($campaign_id = 0) {
-		global $wpdb;
-		$appq_integration_center_config = $wpdb->prefix ."appq_integration_center_config";
+		global $tbdb;
+		$appq_integration_center_config = $tbdb->prefix ."appq_integration_center_config";
 
 		// Check if the Campaign was already stored
-		$results = $wpdb->get_results(
-			$wpdb->prepare( "SELECT endpoint FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
+		$results = $tbdb->get_results(
+			$tbdb->prepare( "SELECT endpoint FROM $appq_integration_center_config WHERE campaign_id=%d AND integration='%s' LIMIT 1", array( $campaign_id, $this->integration[ "slug" ] ) ),
 			OBJECT
 		);
 

@@ -25,12 +25,12 @@ class CsvInspector
 		if ( $cp_id == 0 ) { $cp_id = self::$_CAMPAIGN_ID; }
 
 		// Init Table
-		global $wpdb;
-		$appq_evd_bug = $wpdb->prefix ."appq_evd_bug";
+		global $tbdb;
+		$appq_evd_bug = $tbdb->prefix ."appq_evd_bug";
 		
 		// Collect at least 1 result from the Table for the given Campaign in order to determine if the campaign has Bugs
-		$results_ = $wpdb->get_results(
-			$wpdb->prepare(
+		$results_ = $tbdb->get_results(
+			$tbdb->prepare(
 				"SELECT * FROM $appq_evd_bug WHERE campaign_id=%d LIMIT 1",
 				array( $cp_id )
 			),
