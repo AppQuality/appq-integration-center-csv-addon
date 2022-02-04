@@ -12,43 +12,36 @@
  * @subpackage Appq_Integration_Center_Csv_Addon/admin/partials
  */
 
-$CSVRestApi = new CSVRestApi( $cp_id );
+$CSVRestApi = new CSVRestApi($cp_id);
 $file_format = $CSVRestApi->get_format($cp_id);
-$custom_fields = $this->get_custom_fields( $cp_id );
-$selected_fields = $CSVRestApi->get_selected_fields( $cp_id );
+$custom_fields = $this->get_custom_fields($cp_id);
+$selected_fields = $CSVRestApi->get_selected_fields($cp_id);
 $data = array();
 if (!empty($fields = $CSVRestApi->get_fields())) {
-	$data = $fields;
+    $data = $fields;
 } else {
-	$data = $CSVRestApi->basic_configuration;
+    $data = $CSVRestApi->basic_configuration;
 }
 
 ?>
 
-<div class="row mt-5">
-    <label class="mb-3"><?php _e("Select file format", 'appq-integration-center-csv-addon'); ?></label>
-    <select id="available-formats" name="available_formats" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select file format", 'appq-integration-center-csv-addon'); ?>" data-select2-id="5" tabindex="-1" aria-hidden="true">
-        <option value="csv_format" <?= ($file_format == "csv_format") ? "selected='selected'": "" ?>>CSV</option>
-        <option value="xml_format" <?= ($file_format == "xml_format") ? "selected='selected'": "" ?>>XML</option>
+<div class="form-group">
+    <label for="available-formats"><?php _e("Select file format", 'appq-integration-center-csv-addon'); ?></label>
+    <select class="form-control ux-select" id="available-formats" name="csv_endpoint" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select file format", 'appq-integration-center-csv-addon'); ?>">
+        <option value="csv_format" <?= ($file_format == "csv_format") ? "selected='selected'" : "" ?>>CSV</option>
+        <option value="xml_format" <?= ($file_format == "xml_format") ? "selected='selected'" : "" ?>>XML</option>
     </select>
 </div>
-<div class="row mt-5">
+<div class="form-group">
     <label><?php _e("Select fields to export", 'appq-integration-center-csv-addon'); ?></label>
-    <div id="available-fields" class="col-sm-12 available_fields csv-fields">
-        <?php
-        foreach ( $data as $key => $value ) {
-        ?>
-            <span class='field <?= array_key_exists( $key, $selected_fields ) ? "selected" : ""; ?>'
-                data-key="<?= $key ?>"
-                data-value="<?= $value->value ?>"
-                data-description="<?= $value->description ?>">
-                    <?= $key ?>
-            </span>
-        <?php
-        }
-        ?>
-    </div>
+    <select class="form-control csv-fields ux-select" id="available-csv-fields" name="csv-fields" multiple data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select csv fields", 'appq-integration-center-csv-addon'); ?>">
+        <?php foreach ($data as $key => $value) : ?>
+            <option value="<?= $value->value ?>" <?= ($file_format == "xml_format") ? "selected='selected'" : "" ?> data-description="<?= $value->description ?>" <?= array_key_exists($key, $selected_fields) ? "selected" : ""; ?>>
+                <?= $key ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 </div>
 <script type="text/javascript">
-    var cp_id = JSON.parse( '<?php echo json_encode( $cp_id ); ?>' );
+    var cp_id = JSON.parse('<?php echo json_encode($cp_id); ?>');
 </script>

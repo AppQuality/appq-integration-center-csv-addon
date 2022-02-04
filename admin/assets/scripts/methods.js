@@ -6,30 +6,34 @@ function clickAvailableField() {
 
 function clickSaveCSVExport() {
     if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() == "csv_exporter" ) {
+
+        var fields = jQuery("#available-csv-fields").select2('data');
+        console.log("FIelds", fields);
+
         // Check if the button is locked
         if ( ( $submitButton ).hasClass( "locked" ) ) { return false; }
 
         // Lock the Button
         $submitButton.addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
-        // Get format select value
-        var exportFormat = $availableFormatsSelect.val();
 
         // Block save if the are not field selected
-        if ($availableFieldsContainer.find(".field.selected").length == 0) {
+        if (!fields.length) {
             toastr["error"](_x("Select some fields first!", "Integration Center Csv export field selection", "appq-integration-center-csv-addon"));
             // Unlock the buton
             $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
             return false;
         }
 
+        var formData = $csvSettingsForm.serializeArray();
+        console.log("FormData", formData);
+
         // Collect all of the selected fields
         var fieldKeys = {};
-        $availableFieldsContainer.find( ".field" ).each( function() {
+        fields.forEach( function(item) {
             var data = {};
-            data['value'] = jQuery( this ).data( "value" );
-            data['description'] = jQuery( this ).data( "description" );
-            data['key'] = jQuery( this ).data( "key" );
+            data['value'] = item.text;
+            data['key'] = item.id
             if (jQuery( this ).hasClass('selected')) {
                 data['selected'] = 1;
             } else {
@@ -38,18 +42,15 @@ function clickSaveCSVExport() {
             fieldKeys[jQuery( this ).data( "key" )] = data;
         } );
 
-        var jsonFieldKeys = JSON.stringify(fieldKeys);
 
+        formData.push({name: "cp_id", value: cp_id});
+        formData.push({name: "action", value: "save_csv_export"});
+        
         // Perform an AJAX Call
         jQuery.ajax( {
             url: ajax_object.ajax_url,
             type: "POST",
-            data: {
-                action: "save_csv_export",
-                cp_id: cp_id,
-                field_keys: jsonFieldKeys,
-                csv_endpoint: exportFormat
-            },
+            data: formData,
             success: function( response ) {
                 // Unlock the buton
                 $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
