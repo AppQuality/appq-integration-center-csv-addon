@@ -1,14 +1,7 @@
-function clickAvailableField() {
-    var $this = jQuery( this );
-    if ( $this.hasClass( "selected" ) ) { $this.removeClass( "selected" ); }
-    else { $this.addClass( "selected" ); }
-}
-
 function clickSaveCSVExport() {
     if ( jQuery( "#setup_manually_cp [name='bugtracker']" ).val().trim().toLowerCase() == "csv_exporter" ) {
-
-        var fields = jQuery("#available-csv-fields").select2('data');
-        console.log("FIelds", fields);
+        var fields = jQuery("#available-csv-fields").find('option');
+        var fields_selected = jQuery("#available-csv-fields").find('option:selected');
 
         // Check if the button is locked
         if ( ( $submitButton ).hasClass( "locked" ) ) { return false; }
@@ -16,41 +9,45 @@ function clickSaveCSVExport() {
         // Lock the Button
         $submitButton.addClass( "locked" ).attr( "disabled", "disabled" ).find( "i" ).addClass( "fa-spinner" );
 
-
         // Block save if the are not field selected
-        if (!fields.length) {
+        if (!fields_selected.length) {
             toastr["error"](_x("Select some fields first!", "Integration Center Csv export field selection", "appq-integration-center-csv-addon"));
             // Unlock the buton
             $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
             return false;
         }
 
-        var formData = $csvSettingsForm.serializeArray();
-        console.log("FormData", formData);
+        // Get format select value
+        var exportFormat = $availableFormatsSelect.val();
 
         // Collect all of the selected fields
         var fieldKeys = {};
-        fields.forEach( function(item) {
+        fields.each(function() {
+            var item = jQuery(this);
             var data = {};
-            data['value'] = item.text;
-            data['key'] = item.id
-            if (jQuery( this ).hasClass('selected')) {
+            data['value'] = item.data('value');
+            data['description'] = item.data('description');
+            data['key'] = item.data('key');
+            if (this.selected) {
                 data['selected'] = 1;
             } else {
                 data['selected'] = 0;
             }
-            fieldKeys[jQuery( this ).data( "key" )] = data;
-        } );
+            fieldKeys[item.data('key')] = data;
+        });
 
+        var jsonFieldKeys = JSON.stringify(fieldKeys);
 
-        formData.push({name: "cp_id", value: cp_id});
-        formData.push({name: "action", value: "save_csv_export"});
-        
         // Perform an AJAX Call
         jQuery.ajax( {
-            url: ajax_object.ajax_url,
+            url: integration_center_obj.ajax_url,
             type: "POST",
-            data: formData,
+            data: {
+                action: "save_csv_export",
+                cp_id: cp_id,
+                field_keys: jsonFieldKeys,
+                csv_endpoint: exportFormat
+            },
             success: function( response ) {
                 // Unlock the buton
                 $submitButton.removeClass( "locked" ).removeAttr( "disabled" ).find( "i" ).removeClass( "fa-spinner" );
@@ -103,7 +100,7 @@ function saveCSVExport() {
 
         // Invoke the CSV Download
         jQuery.ajax( {
-            url: ajax_object.ajax_url,
+            url: integration_center_obj.ajax_url,
             type: "POST",
             headers: {'Content-Transfer-Encoding': 'UTF-8'},
             data: {
@@ -179,7 +176,7 @@ function newFieldMapping() {
 
     // Invoke the CSV Download
     jQuery.ajax( {
-        url: ajax_object.ajax_url,
+        url: integration_center_obj.ajax_url,
         type: "POST",
         data: {
             action: "new_field_mapping",
@@ -213,11 +210,11 @@ function editModalHandler() {
 
 function deleteCSVExport(data) {
     jQuery.ajax( {
-        url: ajax_object.ajax_url,
+        url: integration_center_obj.ajax_url,
         type: "POST",
         data: {
             action: "appq_delete_csv_export",
-            nonce: ajax_object.nonce,
+            nonce: integration_center_obj.nonce,
             file_name: data.file_name
         },
         success: function( response ) {

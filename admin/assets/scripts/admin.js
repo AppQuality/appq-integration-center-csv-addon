@@ -22,6 +22,7 @@ jQuery( document ).ready( function() {
     // Cache Containers
     $bugsListContainer = jQuery( "#bugs_list" );
     $availableFieldsContainer = jQuery( "#available-fields" );
+    $availableFormatsSelect = jQuery("#available-formats");
     $saveCSVExport = jQuery( "#save-csv-export" );
     $integrationCenterButtons.sendAll = $bugsListContainer.find( ".send-all" );
     $integrationCenterButtons.sendSelected = $bugsListContainer.find( ".send-selected" );
@@ -30,10 +31,9 @@ jQuery( document ).ready( function() {
     $csvSettingsForm = jQuery('#csv_tracker_settings');
     $newMappingButton = jQuery('#add_new_mapping_field');
     $editMappingModalButton = jQuery('#csv_fields_settings button[data-toggle="modal"][data-target="#add_mapping_field_modal"]');
-    $submitButton = jQuery('#custom_tracker_settings_modal').find('button.confirm');
+    $submitButton = jQuery('#custom_tracker_settings_modal').find('#save_tracker_settings');
 
     // Init Methods
-    $availableFieldsContainer.on( "click", ".field", clickAvailableField );
     $submitButton.on('click', clickSaveCSVExport);
     $integrationCenterButtons.sendSingle.on( "click", ".upload_bug", clickSend );
     $integrationCenterButtons.sendSelected.on("click", clickSend);

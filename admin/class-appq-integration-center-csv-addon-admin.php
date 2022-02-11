@@ -183,7 +183,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
      */
     public function save_csv_export() {
         $cp_id = isset( $_POST[ "cp_id" ] ) && !empty( $_POST[ "cp_id" ] ) ? intval( $_POST[ "cp_id" ] ) : false;
-        $field_keys = isset( $_POST[ "csv-fields" ] ) && !empty( $_POST[ "csv-fields" ] ) ? $_POST[ "csv-fields" ] : '';
+        $field_keys = isset( $_POST[ "field_keys" ] ) && !empty( $_POST[ "field_keys" ] ) ? $_POST[ "field_keys" ] : '';
         $endpoint = array_key_exists('csv_endpoint', $_POST) ? $_POST['csv_endpoint'] : '';
         $apikey = array_key_exists('csv_apikey', $_POST) ? $_POST['csv_apikey'] : '';
 

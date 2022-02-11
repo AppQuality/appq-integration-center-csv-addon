@@ -27,17 +27,20 @@ if (!empty($fields = $CSVRestApi->get_fields())) {
 
 <div class="form-group">
     <label for="available-formats"><?php _e("Select file format", 'appq-integration-center-csv-addon'); ?></label>
-    <select class="form-control ux-select" id="available-formats" name="csv_endpoint" data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select file format", 'appq-integration-center-csv-addon'); ?>">
+    <select class="form-control ux-select select2-hidden-accessible" id="available-formats" name="csv_endpoint" data-parent="#csv_tracker_settings" data-placeholder="<?php _e("Select file format", 'appq-integration-center-csv-addon'); ?>">
         <option value="csv_format" <?= ($file_format == "csv_format") ? "selected='selected'" : "" ?>>CSV</option>
         <option value="xml_format" <?= ($file_format == "xml_format") ? "selected='selected'" : "" ?>>XML</option>
     </select>
 </div>
 <div class="form-group">
     <label><?php _e("Select fields to export", 'appq-integration-center-csv-addon'); ?></label>
-    <select class="form-control csv-fields ux-select" id="available-csv-fields" name="csv-fields" multiple data-parent="#setup_manually_cp" class="ux-select select2-hidden-accessible" data-placeholder="<?php _e("Select csv fields", 'appq-integration-center-csv-addon'); ?>">
+    <select class="form-control csv-fields ux-select select2-hidden-accessible" id="available-csv-fields" name="csv_fields" multiple data-parent="#csv_tracker_settings" data-placeholder="<?php _e("Select csv fields", 'appq-integration-center-csv-addon'); ?>">
         <?php foreach ($data as $key => $value) : ?>
-            <option value="<?= $value->value ?>" <?= ($file_format == "xml_format") ? "selected='selected'" : "" ?> data-description="<?= $value->description ?>" <?= array_key_exists($key, $selected_fields) ? "selected" : ""; ?>>
-                <?= $key ?>
+            <option class="field" <?= array_key_exists( $key, $selected_fields ) ? "selected='selected'" : ""; ?>
+                data-key="<?= $key ?>"
+                data-value="<?= $value->value ?>"
+                data-description="<?= $value->description ?>">
+                    <?= $key ?>
             </option>
         <?php endforeach; ?>
     </select>
