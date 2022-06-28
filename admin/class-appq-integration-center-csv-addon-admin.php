@@ -304,7 +304,7 @@ class Appq_Integration_Center_Csv_Addon_Admin {
                         // Fill the Bug Data
                         foreach ( $field_keys as $field_key ) {
                             $data = $CSV_API->bug_data_replace( $bug, $field_key->value );
-                            $csv_data[ $bug_id ][] = !empty( $data ) ? str_replace("\r\n","",strip_tags($data)) : "";
+                            $csv_data[ $bug_id ][] = !empty( $data ) ? $data : "";
                         }
                     }
 
